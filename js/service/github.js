@@ -5,23 +5,16 @@ const GITHUB_API = 'https://api.github.com'
 import {sendApi} from '../api/api.js'
 
 export function fetchReleaseNote(owner, repo) {
-
-	sendApi({
+	return sendApi({
 		method: GET,
 		url: `${GITHUB_API}/repos/${owner}/${repo}/releases`
 	})
-			.then((result) => {
-				console.log('then', result)
-			})
 }
 
 export function searchRepository(query) {
-	sendApi({
+	return sendApi({
 		method: GET,
-		url: `${GITHUB_API}/search/repositories?q=${query}&sort=stars&order=desc`
+		url: `${GITHUB_API}/search/repositories?q=${query}&sort=&order=desc`
 	})
-			.then((result) => {
-				console.log('then', result)
-			})
 }
 
