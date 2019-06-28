@@ -24,15 +24,31 @@ btnSearch.addEventListener('click', function(event) {
 			})
 }, false)
 
+function subscribeRepo(e) {
+	console.log(e.currentTarget.dataset)
+}
+
+
+
 function showResult(repositorys) {
 	let innerResult = ''
 
 	for(const repo of repositorys) {
 		innerResult += `
 			<div style="border-bottom:1px solid #aaa;">
-				${repo.fullName} / ${repo.language} / ${repo.starCount} / ${repo.description}
+				${repo.fullName} / ${repo.language} / ${repo.starCount} / ${repo.description} 
+				<button class="btn-subscribe"
+					data-fullName="${repo.fullName}"
+					data-language="${repo.language}"
+					data-starCount="${repo.starCount}"
+					data-description="${repo.description}"
+				>추가</button>
 			</div>
 		`
 	}
 	searchResult.innerHTML = innerResult
+
+	document.querySelectorAll('.btn-subscribe').forEach(el => {
+		el.addEventListener('click', subscribeRepo, false)
+	})
 }
