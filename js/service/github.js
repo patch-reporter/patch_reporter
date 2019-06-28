@@ -18,4 +18,15 @@ export function searchRepository(query) {
     }).then(result => {
         console.log('then', result);
     });
+	return sendApi({
+		method: GET,
+		url: `${GITHUB_API}/repos/${owner}/${repo}/releases`
+	})
+}
+
+export function searchRepository(query) {
+	return sendApi({
+		method: GET,
+		url: `${GITHUB_API}/search/repositories?q=${query}&sort=&order=desc`
+	})
 }
