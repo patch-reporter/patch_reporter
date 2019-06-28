@@ -1,3 +1,3 @@
-import {searchRepository} from './service/github'
+import {searchRepository} from './service/github.js'
 
 searchRepository('facebook/react')
