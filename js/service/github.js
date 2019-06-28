@@ -2,7 +2,9 @@ const GET = 'GET'
 
 const GITHUB_API = 'https://api.github.com'
 
-function fetchReleaseNote(owner, repo) {
+import {sendApi} from '../api/api'
+
+export function fetchReleaseNote(owner, repo) {
 
 	sendApi({
 		method: GET,
@@ -13,4 +15,13 @@ function fetchReleaseNote(owner, repo) {
 			})
 }
 
-fetchReleaseNote('facebook', 'react')
+export function searchRepository(query) {
+	sendApi({
+		method: GET,
+		url: `${GITHUB_API}/search/repositories/?q=${query}&sort=stars&order=desc`
+	})
+			.then((result) => {
+				console.log('then', result)
+			})
+}
+

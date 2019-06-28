@@ -1,4 +1,4 @@
-const sendApi = ({method, url, callback = () => {}, data, type = 'JSON'}) => {
+export const sendApi = ({method, url, callback = () => {}, data, type = 'JSON'}) => {
 
 	return new Promise(function(resolve, reject) {
 		let xhr = new XMLHttpRequest()
