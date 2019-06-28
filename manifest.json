@@ -15,5 +15,9 @@
       },
       "description": "Opens hello.html"
     }
-  }
+  },
+  "web_accessible_resources": [
+    "js/api/api.js",
+    "js/service/github.js"
+  ]
 }
