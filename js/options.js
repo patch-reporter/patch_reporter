@@ -1,34 +1,53 @@
 import {searchRepository} from './service/github.js'
+import {qs} from './utils/helper.js'
+
+searchRepository('facebook/react')
+
+const checkbox = qs('.toggle-default-tab')
+
+checkbox.addEventListener('click', function() {
+	chrome.storage.sync.set({defaultnewtab: checkbox.checked})
+})
+
+console.log(chrome.storage)
+chrome.storage.sync.get('defaultnewtab', function(storage) {
+	if(storage.defaultnewtab) {
+		chrome.tabs.update({url: 'chrome-search://local-ntp/local-ntp.html'})
+	}
+})
 
 const btnSearch = document.querySelector('#btn-search')
 const inputSearch = document.querySelector('#input-search')
 const searchResult = document.querySelector('#search-result')
 
-btnSearch.addEventListener('click', function(event) {
-	const query = inputSearch.value;
-	if(!query) {
-		return
-	}
-	searchRepository(query)
-			.then((response) => {
+btnSearch.addEventListener(
+		'click',
+		function(event) {
+			const query = inputSearch.value
+			if(!query) {
+				return
+			}
+			searchRepository(query).then(response => {
 				console.log(response)
-				showResult(response.items.map((item) => {
-					return {
-						id: item.id,
-						fullName: item.full_name,
-						language: item.language,
-						starCount: item.stargazers_count,
-						description: item.description
-					}
-				}))
+				showResult(
+						response.items.map(item => {
+							return {
+								id: item.id,
+								fullName: item.full_name,
+								language: item.language,
+								starCount: item.stargazers_count,
+								description: item.description,
+							}
+						})
+				)
 			})
-}, false)
+		},
+		false
+)
 
 function subscribeRepo(e) {
 	console.log(e.currentTarget.dataset)
 }
-
-
 
 function showResult(repositorys) {
 	let innerResult = ''
@@ -49,6 +68,6 @@ function showResult(repositorys) {
 	searchResult.innerHTML = innerResult
 
 	document.querySelectorAll('.btn-subscribe').forEach(el => {
-		el.addEventListener('click', subscribeRepo, false)
+		el.addEventListener('click', subscribeRepo, false);
 	})
 }

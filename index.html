@@ -1,11 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title> Hello Extensions </title>
-  </head>
-
-  <body>
-    <h1>Hello Extensions</h1>
-  </body>
-  <script type="module" src="js/index.js"></script>
+    <head>
+        <title>Patch-Reporter</title>
+        <script src="js/node_modules/showdown.js"></script>
+        <!-- <link rel="stylesheet" type="text/css" href="css/reset.css" /> -->
+        <style>
+            .release-box {
+                display: flex;
+            }
+            .library {
+                padding: 24px;
+            }
+            .release {
+                border-left: 2px solid #e1e4e8;
+                padding: 24px 16px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="release-timeline">
+            <div class="release-box">
+                <div class="library"><h2>React</h2></div>
+                <div class="release"></div>
+            </div>
+        </div>
+    </body>
+    <script type="module" src="js/index.js"></script>
 </html>
