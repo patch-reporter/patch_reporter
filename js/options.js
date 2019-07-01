@@ -47,6 +47,32 @@ btnSearch.addEventListener(
 
 function subscribeRepo(e) {
 	console.log(e.currentTarget.dataset)
+
+	const { fullname, language, starcount, description} = e.currentTarget.dataset;
+	chrome.storage.sync.get({repositories: []}, function(result){
+		const repositories = result.repositories;
+
+		const newItem = {
+			fullname: fullname,
+			language: language,
+			starcount: starcount,
+			description: description
+		};
+		repositories.push(newItem)
+
+		chrome.storage.sync.set({
+			repositories: repositories
+		}, function(){
+			if (!chrome.runtime.lastError) {
+				console.log('저장되었습니다.')
+
+				chrome.storage.sync.get('repositories', function(data) {
+					console.log('after set');
+					console.log(data.addedItems)
+				})
+			}
+		})
+	})
 }
 
 function showResult(repositorys) {
@@ -57,9 +83,9 @@ function showResult(repositorys) {
 			<div style="border-bottom:1px solid #aaa;">
 				${repo.fullName} / ${repo.language} / ${repo.starCount} / ${repo.description} 
 				<button class="btn-subscribe"
-					data-fullName="${repo.fullName}"
+					data-fullname="${repo.fullName}"
 					data-language="${repo.language}"
-					data-starCount="${repo.starCount}"
+					data-starcount="${repo.starCount}"
 					data-description="${repo.description}"
 				>추가</button>
 			</div>
