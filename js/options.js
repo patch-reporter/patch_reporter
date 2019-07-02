@@ -46,11 +46,13 @@ btnSearch.addEventListener(
 );
 
 function subscribeRepo(e) {
-	console.log(e.currentTarget.dataset)
-
 	const { fullname, language, starcount, description} = e.currentTarget.dataset;
-	chrome.storage.sync.get({repositories: []}, function(result){
+	chrome.storage.sync.get({repositories: {}}, function(result){
 		const repositories = result.repositories;
+
+		if(repositories[fullname]) {
+			return
+		}
 
 		const newItem = {
 			fullname: fullname,
@@ -58,20 +60,12 @@ function subscribeRepo(e) {
 			starcount: starcount,
 			description: description
 		};
-		repositories.push(newItem)
+
+		repositories[fullname] = newItem
 
 		chrome.storage.sync.set({
 			repositories: repositories
-		}, function(){
-			if (!chrome.runtime.lastError) {
-				console.log('저장되었습니다.')
-
-				chrome.storage.sync.get('repositories', function(data) {
-					console.log('after set');
-					console.log(data.addedItems)
-				})
-			}
-		})
+		}, function(){})
 	})
 }
 

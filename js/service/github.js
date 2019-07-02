@@ -14,6 +14,6 @@ export function fetchReleaseNote(owner, repo) {
 export function searchRepository(query) {
     return sendApi({
         method: GET,
-        url: `${GITHUB_API}/search/repositories?q=${query}&sort=stars&order=desc`,
+        url: `${GITHUB_API}/search/repositories?q=${query}&sort=&order=desc`,
     });
 }
