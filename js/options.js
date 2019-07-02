@@ -54,14 +54,12 @@ function subscribeRepo(e) {
 			return
 		}
 
-		const newItem = {
+		repositories[fullname] = {
 			fullname: fullname,
 			language: language,
 			starcount: starcount,
 			description: description
 		};
-
-		repositories[fullname] = newItem
 
 		chrome.storage.sync.set({
 			repositories: repositories
