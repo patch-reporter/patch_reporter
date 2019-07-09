@@ -3,29 +3,6 @@ import {qs} from './utils/helper.js'
 
 const converter = new showdown.Converter()
 
-/*
-fetchReleaseNote('facebook', 'react').then(datas => {
-	console.log(datas)
-	for(let data of datas) {
-		const date = new Date(data.published_at)
-		const milliseconds = date.getTime()
-		const html = converter.makeHtml(data.body)
-		const $rendeder = qs('.release')
-		$rendeder.innerHTML += html
-	}
-})
-
-fetchReleaseNote('ant-design', 'ant-design').then(datas => {
-	for(let data of datas) {
-		const date = new Date(data.published_at)
-		const milliseconds = date.getTime()
-		const html = converter.makeHtml(data.body)
-		const $rendeder = qs('.release')
-		$rendeder.innerHTML += html
-	}
-});
-*/
-
 chrome.storage.sync.get({repositories: {}}, function({repositories}) {
 	console.log(repositories)
 
@@ -46,8 +23,15 @@ chrome.storage.sync.get({repositories: {}}, function({repositories}) {
 function renderReleaseList(releases) {
 	let inner = ''
 	for(let release of releases) {
-		inner += '<br>----------------------------------<br>'
-		inner += converter.makeHtml(release.body)
+		let body = converter.makeHtml(release.body)
+		let repo = release.url.replace(/https:\/\/api.github.com\/repos\/(.*)\/releases\/.*/, '$1')
+		inner += `
+			<div class="release-body">
+				<div class="label">${repo}</div>
+				<div class="label">${release.created_at}</div>
+				${body}
+			</div>
+		`
 	}
 
 	qs('.release').innerHTML = inner

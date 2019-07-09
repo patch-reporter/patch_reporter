@@ -1,29 +1,23 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Patch-Reporter</title>
-        <script src="js/node_modules/showdown.js"></script>
-        <!-- <link rel="stylesheet" type="text/css" href="css/reset.css" /> -->
-        <style>
-            .release-box {
-                display: flex;
-            }
-            .library {
-                padding: 24px;
-            }
-            .release {
-                border-left: 2px solid #e1e4e8;
-                padding: 24px 16px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="release-timeline">
-            <div class="release-box">
-                <div class="library"><h2>React</h2></div>
-                <div class="release"></div>
-            </div>
+<head>
+  <title>Patch-Reporter</title>
+  <link rel="stylesheet" type="text/css" href="css/index.css"/>
+</head>
+<body>
+  <div id="release-timeline">
+    <div class="release-box">
+      <div class="library"><h2>React</h2></div>
+      <div class="release">
+        <div class="loading">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
         </div>
-    </body>
-    <script type="module" src="js/index.js"></script>
+      </div>
+    </div>
+  </div>
+  <script src="js/node_modules/showdown.js"></script>
+  <script type="module" src="js/index.js"></script>
+</body>
 </html>
