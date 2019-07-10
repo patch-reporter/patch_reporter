@@ -1,18 +1,26 @@
 body {
     background-color: #f3f3f3;
 }
-#release-timeline .release-box {
+
+.release-note {
     display: flex;
+    flex-direction: column;
 }
-#release-timeline .release-box .library {
-    padding: 24px;
+
+.flex-row-wrap {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
 }
-#release-timeline .release-box .release {
+#release-timeline .release-note .library-name {
+    width: 200px;
+}
+#release-timeline .release-note .release {
+    flex: 1;
     border-left: 2px solid #e1e4e8;
     padding: 24px 16px;
-    flex-grow: 1;
 }
-#release-timeline .release-box .release .release-body {
+#release-timeline .release-note .release .release-body {
     background: #fff;
     border-radius: 20px;
     padding: 10px 20px;
@@ -20,11 +28,9 @@ body {
     margin: 40px 0;
 }
 
-#release-timeline .release-box .release .release-body:first-child {
+#release-timeline .release-note .release .release-body:first-child {
     margin-top: 0;
 }
-
-
 
 /* Loading */
 .loading {
@@ -58,16 +64,25 @@ body {
 }
 
 @-webkit-keyframes bouncedelay {
-    0%, 80%, 100% { -webkit-transform: scale(0.0) }
-    40% { -webkit-transform: scale(1.0) }
+    0%,
+    80%,
+    100% {
+        -webkit-transform: scale(0);
+    }
+    40% {
+        -webkit-transform: scale(1);
+    }
 }
 
 @keyframes bouncedelay {
-    0%, 80%, 100% {
-        transform: scale(0.0);
-        -webkit-transform: scale(0.0);
-    } 40% {
-          transform: scale(1.0);
-          -webkit-transform: scale(1.0);
-      }
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+        -webkit-transform: scale(0);
+    }
+    40% {
+        transform: scale(1);
+        -webkit-transform: scale(1);
+    }
 }

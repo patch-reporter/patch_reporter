@@ -101,3 +101,16 @@ export function htmlEscape(s) {
         .replace(/\n/g, '<br />')
         .replace(/ /g, '&nbsp');
 }
+
+export function getCurrentTime(t) {
+    const date = new Date(t);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const fixedSeconds = seconds === 0 ? seconds + '0' : seconds;
+
+    return month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ':' + fixedSeconds;
+}
