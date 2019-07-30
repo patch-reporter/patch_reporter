@@ -63,6 +63,15 @@ body {
     animation-delay: -0.16s;
 }
 
+.icon-wrap {
+    text-align: right;
+}
+
+.setting-icon {
+    width: 20px;
+    height: 20px;
+}
+
 @-webkit-keyframes bouncedelay {
     0%,
     80%,

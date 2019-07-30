@@ -1,0 +1,33 @@
+.container {
+    margin: auto;
+    width: 70%;
+}
+
+.modal {
+    visibility: hidden;
+}
+
+.modal__overlay {
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.modal__contents {
+    overflow: auto;
+    background-color: #fff;
+    width: 32rem;
+    position: absolute;
+    left: 50%;
+    margin-left: -16rem;
+    top: 3rem;
+    min-height: 32rem;
+    padding: 70px 20px 40px;
+}
+
+.col {
+    display: inline-block;
+}

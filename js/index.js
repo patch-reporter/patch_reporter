@@ -1,4 +1,4 @@
-import { fetchReleaseNote } from './service/github.js';
+import { fetchReleaseNotes } from './service/github.js';
 import { qs, getCurrentTime } from './utils/helper.js';
 
 const converter = new showdown.Converter();
@@ -8,7 +8,7 @@ chrome.storage.sync.get({ repositories: {} }, function({ repositories }) {
 
     Promise.all(
         Object.values(repositories).map(({ fullname }) =>
-            fetchReleaseNote(fullname.split('/')[0], fullname.split('/')[1])
+            fetchReleaseNotes(fullname.split('/')[0], fullname.split('/')[1])
         )
     ).then(result => {
         // 일단 구현 했는데, 더 빠른 방법이 있을 수도

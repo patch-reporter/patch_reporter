@@ -7,7 +7,6 @@ export const sendApi = ({ method, url, callback = () => {}, data, type = 'JSON' 
             return false;
         }
 
-        // xhr.onreadystatechange = () => {successApiCall(xhr, callback, type)}
         xhr.open(method, url);
 
         if (type === 'JSON') {
