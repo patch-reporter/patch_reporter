@@ -42,12 +42,11 @@
     padding: 0 10px;
 }
 
-.list__item:last-child {
-    text-align: center;
+.list__item span {
+    margin: 0 auto;
 }
 
 .list__item:last-child span {
-    margin: 0 auto;
     color: red;
     cursor: pointer;
 }

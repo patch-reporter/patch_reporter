@@ -24,11 +24,11 @@ $on(
     false
 );
 
-// chrome.storage.sync.get('defaultnewtab', function(storage) {
-//     if (storage.defaultnewtab) {
-//         chrome.tabs.update({ url: 'chrome-search://local-ntp/local-ntp.html' });
-//     }
-// });
+chrome.storage.sync.get('defaultnewtab', function(storage) {
+    if (storage.defaultnewtab) {
+        chrome.tabs.update({ url: 'chrome-extension://laookkfknpbbblfpciffpaejjkokdgca/dashboard.html' });
+    }
+});
 
 $on(window, 'load', function() {
     const btnSearch = qs('.btn-search');
