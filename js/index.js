@@ -25,15 +25,15 @@ function renderReleaseList(releases) {
     for (let release of releases) {
         let body = converter.makeHtml(release.body);
         let repo = release.url.replace(/https:\/\/api.github.com\/repos\/(.*)\/releases\/.*/, '$1');
-        console.log(release);
+
         inner += `
-			<div class="flex-row-wrap">
-				<div class="library-name">
+			<div class="flex__row--wrap">
+				<div class="release__note--library-name">
 					<h3>${repo}</h3>
 					<p>created: ${getCurrentTime(release.created_at)}</p>
 				</div>
-				<div class="release">
-					<div class="release-body">
+				<div class="release__timeline-contents">
+					<div class="release__timeline-contents-body">
 						${body}
 					</div>
 				</div>
@@ -41,5 +41,6 @@ function renderReleaseList(releases) {
 		`;
     }
 
-    qs('.release-note').innerHTML = inner;
+    const releaseNote = qs('.release__note');
+    releaseNote.innerHTML = inner;
 }

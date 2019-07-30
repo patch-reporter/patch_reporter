@@ -9,25 +9,27 @@ body {
     width: 70%;
 }
 
-.release-note {
+.release__note {
     display: flex;
     flex-direction: column;
 }
 
-.flex-row-wrap {
+.flex__row--wrap {
     display: flex;
     flex-direction: row;
     flex: 1;
 }
-#release-timeline .release-note .library-name {
+.release__note--library-name {
+    padding: 25px 10px;
     width: 200px;
 }
-#release-timeline .release-note .release {
+.release__timeline-contents {
     flex: 1;
     border-left: 2px solid #e1e4e8;
     padding: 24px 16px;
 }
-#release-timeline .release-note .release .release-body {
+
+.release__timeline-contents-body {
     background: #fff;
     border-radius: 20px;
     padding: 10px 20px;
@@ -35,7 +37,7 @@ body {
     margin: 40px 0;
 }
 
-#release-timeline .release-note .release .release-body:first-child {
+.release__timeline-contents-body:first-child {
     margin-top: 0;
 }
 
@@ -70,7 +72,7 @@ body {
     animation-delay: -0.16s;
 }
 
-.icon-wrap {
+.icon__wrap {
     text-align: right;
 }
 
