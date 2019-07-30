@@ -2,6 +2,13 @@ body {
     background-color: #f3f3f3;
 }
 
+.container {
+    padding-top: 170px;
+    padding-bottom: 64px;
+    margin: 0 auto;
+    width: 70%;
+}
+
 .release-note {
     display: flex;
     flex-direction: column;

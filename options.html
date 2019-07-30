@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" type="text/css" href="css/reset.css" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <link rel="stylesheet" type="text/css" href="css/option.css" />
     </head>
@@ -10,8 +11,17 @@
             <section class="box">
                 <h3 class="box-title">구독 중인 라이브러리</h3>
                 <div class="box__body">
-                    <div class="current-repositories">
-                        <div class="row"></div>
+                    <ul class="current-repositories">
+                        <li class="list">
+                            <div class="list__item--title"><span>Name</span></div>
+                            <div class="list__item--title"><span>Language</span></div>
+                            <div class="list__item--title"><span>Starred</span></div>
+                            <div class="list__item--title"><span>Description</span></div>
+                            <div class="list__item--title"><span>Actions</span></div>
+                        </li>
+                    </ul>
+                    <div class="btn__container">
+                        <button class="btn__add">추가하기</button>
                     </div>
                 </div>
             </section>
@@ -23,10 +33,10 @@
                 <h3 class="modal__title">구독 할 라이브러리</h3>
                 <div class="modal__body">
                     <div class="modal__body--search">
-                        <input type="text" id="input-search" />
-                        <button id="btn-search">검색</button>
+                        <input type="text" class="input-search" />
+                        <button class="btn-search">검색</button>
                     </div>
-                    <div id="search-result"></div>
+                    <div class="search-result"></div>
                 </div>
             </div>
         </div>

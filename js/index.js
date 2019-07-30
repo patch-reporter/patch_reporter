@@ -7,8 +7,8 @@ chrome.storage.sync.get({ repositories: {} }, function({ repositories }) {
     console.log(repositories);
 
     Promise.all(
-        Object.values(repositories).map(({ fullname }) =>
-            fetchReleaseNotes(fullname.split('/')[0], fullname.split('/')[1])
+        Object.values(repositories).map(({ a_fullname }) =>
+            fetchReleaseNotes(a_fullname.split('/')[0], a_fullname.split('/')[1])
         )
     ).then(result => {
         // 일단 구현 했는데, 더 빠른 방법이 있을 수도

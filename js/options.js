@@ -13,60 +13,109 @@ console.log(chrome.storage);
 // })
 
 $on(window, 'load', function() {
-    chrome.storage.sync.get({ repositories: {} }, function(result) {
+    const btnSearch = qs('.btn-search');
+    const btnAdd = qs('.btn__add');
+    const overlay = qs('.modal__overlay');
+
+    getSubscribedLibraries();
+
+    $on(btnSearch, 'click', handleSearchClick, false);
+    $on(btnAdd, 'click', openModal, false);
+    $on(overlay, 'click', closeModal, false);
+});
+
+function openModal() {
+    const modal = qs('.modal');
+    modal.classList.add('modal__visible');
+}
+
+function closeModal() {
+    const modal = qs('.modal');
+    modal.classList.remove('modal__visible');
+}
+
+function getSubscribedLibraries() {
+    chrome.storage.sync.get(null, function(result) {
         console.log(result);
-        const repositories = result.repositories;
         const currentRepositories = qs('.current-repositories');
         const fragment = document.createDocumentFragment();
 
-        for (const repo in repositories) {
-            const row = document.createElement('div');
-            const repository = repositories[repo];
-            row.className = 'row';
-            for (const property in repository) {
-                const col = document.createElement('div');
-                const text = document.createTextNode(repository[property]);
-                col.className = 'col';
-                col.appendChild(text);
-                row.appendChild(col);
+        for (const repo in result) {
+            const repository = result[repo];
+            const skeletonRepository = {
+                ...repository,
+                e_actions: '삭제',
+            };
+            const list = document.createElement('li');
+
+            list.className = 'list';
+            list.dataset.id = repo;
+
+            for (const property in skeletonRepository) {
+                const listItem = document.createElement('div');
+                const span = document.createElement('span');
+                const text = document.createTextNode(skeletonRepository[property]);
+
+                if (property === 'e_actions') {
+                    $on(
+                        span,
+                        'click',
+                        function() {
+                            removeSubscribedLibrary(skeletonRepository.a_fullname);
+                        },
+                        false
+                    );
+                }
+
+                listItem.className = 'list__item';
+                span.appendChild(text);
+                listItem.appendChild(span);
+                list.appendChild(listItem);
             }
-            fragment.appendChild(row);
+            fragment.appendChild(list);
         }
+
         currentRepositories.appendChild(fragment);
     });
-});
+}
 
-const btnSearch = qs('#btn-search');
-const inputSearch = qs('#input-search');
-const searchResult = qs('#search-result');
-
-$on(
-    btnSearch,
-    'click',
-    function() {
-        const query = inputSearch.value;
-        if (!query) {
-            return;
+function removeSubscribedLibrary(libraryName) {
+    const currentRepositories = document.querySelector('.current-repositories');
+    const list = currentRepositories.querySelectorAll('.list');
+    let selectedList;
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].dataset.id === libraryName) {
+            selectedList = list[i];
         }
-        fetchRepositories(query).then(response => {
-            console.log(response);
-            showResult(
-                response.items.map(item => {
-                    return {
-                        id: item.id,
-                        a_fullName: item.full_name,
-                        b_language: item.language,
-                        c_starCount: item.stargazers_count,
-                        d_description: item.description,
-                    };
-                })
-            );
-        });
-    },
-    false
-);
+    }
+    currentRepositories.removeChild(selectedList);
+    chrome.storage.sync.remove(libraryName);
+}
+
+function handleSearchClick() {
+    const inputSearch = qs('.input-search');
+    const query = inputSearch.value;
+    if (!query) {
+        return;
+    }
+    fetchRepositories(query).then(response => {
+        console.log(response);
+        showResult(
+            response.items.map(item => {
+                return {
+                    id: item.id,
+                    a_fullName: item.full_name,
+                    b_language: item.language,
+                    c_starCount: item.stargazers_count,
+                    d_description: item.description,
+                };
+            })
+        );
+    });
+}
 
 function showResult(repositories) {
+    const searchResult = qs('.search-result');
     let innerResult = '';
 
     for (const repo of repositories) {
@@ -96,23 +145,25 @@ function subscribeRepo(e) {
     const { fullname, language, starcount, description } = e.currentTarget.dataset;
     chrome.storage.sync.get({ repositories: {} }, function(result) {
         console.log(result);
-        const repositories = result.repositories;
+        // const repositories = result.repositories;
 
-        console.log(repositories);
-        if (repositories[fullname]) {
-            return;
-        }
+        // console.log(repositories);
+        // if (repositories[fullname]) {
+        //     return;
+        // }
 
-        repositories[fullname] = {
+        // repositories[fullname] = {
+        const library = {
             a_fullname: fullname,
             b_language: language,
             c_starcount: starcount,
             d_description: description,
         };
+        console.log(library);
 
         chrome.storage.sync.set(
             {
-                repositories: repositories,
+                [fullname]: library,
             },
             function() {}
         );
