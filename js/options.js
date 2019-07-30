@@ -1,16 +1,34 @@
 import { fetchRepositories } from './service/github.js';
 import { qs, qsa, $on } from './utils/helper.js';
 
-// checkbox.addEventListener('click', function() {
-//     chrome.storage.sync.set({ defaultnewtab: checkbox.checked });
-// });
+const defaultTheme = qs('.default__theme');
+const patchTmeme = qs('.patch-reporter__theme');
+$on(
+    defaultTheme,
+    'click',
+    function() {
+        chrome.storage.sync.get(null, function(result) {
+            console.log(result);
+        });
+        chrome.storage.sync.set({ defaultnewtab: true });
+    },
+    false
+);
 
-console.log(chrome.storage);
+$on(
+    patchTmeme,
+    'click',
+    function() {
+        chrome.storage.sync.remove('defaultnewtab');
+    },
+    false
+);
+
 // chrome.storage.sync.get('defaultnewtab', function(storage) {
-// 	if(storage.defaultnewtab) {
-// 		chrome.tabs.update({url: 'chrome-search://local-ntp/local-ntp.html'})
-// 	}
-// })
+//     if (storage.defaultnewtab) {
+//         chrome.tabs.update({ url: 'chrome-search://local-ntp/local-ntp.html' });
+//     }
+// });
 
 $on(window, 'load', function() {
     const btnSearch = qs('.btn-search');
@@ -36,8 +54,17 @@ function closeModal() {
 
 function getSubscribedLibraries() {
     chrome.storage.sync.get(null, function(result) {
-        console.log(result);
         const currentRepositories = qs('.current-repositories');
+        currentRepositories.innerHTML = '';
+        currentRepositories.innerHTML += `
+            <li class="list">
+                <div class="list__item--title"><span>Name</span></div>
+                <div class="list__item--title"><span>Language</span></div>
+                <div class="list__item--title"><span>Starred</span></div>
+                <div class="list__item--title"><span>Description</span></div>
+                <div class="list__item--title"><span>Actions</span></div>
+            </li>
+        `;
         const fragment = document.createDocumentFragment();
 
         for (const repo in result) {
@@ -80,16 +107,8 @@ function getSubscribedLibraries() {
 }
 
 function removeSubscribedLibrary(libraryName) {
-    const currentRepositories = document.querySelector('.current-repositories');
-    const list = currentRepositories.querySelectorAll('.list');
-    let selectedList;
-    for (let i = 0; i < list.length; i++) {
-        if (list[i].dataset.id === libraryName) {
-            selectedList = list[i];
-        }
-    }
-    currentRepositories.removeChild(selectedList);
     chrome.storage.sync.remove(libraryName);
+    getSubscribedLibraries();
 }
 
 function handleSearchClick() {
@@ -143,29 +162,26 @@ function showResult(repositories) {
 
 function subscribeRepo(e) {
     const { fullname, language, starcount, description } = e.currentTarget.dataset;
-    chrome.storage.sync.get({ repositories: {} }, function(result) {
-        console.log(result);
-        // const repositories = result.repositories;
+    chrome.storage.sync.get(null, function(result) {
+        if (result[fullname]) {
+            alert('이미 추가된 라이브러리입니다.');
+            return;
+        }
 
-        // console.log(repositories);
-        // if (repositories[fullname]) {
-        //     return;
-        // }
-
-        // repositories[fullname] = {
         const library = {
             a_fullname: fullname,
             b_language: language,
             c_starcount: starcount,
             d_description: description,
         };
-        console.log(library);
 
         chrome.storage.sync.set(
             {
                 [fullname]: library,
             },
-            function() {}
+            function() {
+                getSubscribedLibraries();
+            }
         );
     });
 }

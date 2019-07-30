@@ -3,11 +3,9 @@ import { qs, getCurrentTime } from './utils/helper.js';
 
 const converter = new showdown.Converter();
 
-chrome.storage.sync.get({ repositories: {} }, function({ repositories }) {
-    console.log(repositories);
-
+chrome.storage.sync.get(null, function(result) {
     Promise.all(
-        Object.values(repositories).map(({ a_fullname }) =>
+        Object.values(result).map(({ a_fullname }) =>
             fetchReleaseNotes(a_fullname.split('/')[0], a_fullname.split('/')[1])
         )
     ).then(result => {
