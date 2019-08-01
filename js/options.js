@@ -26,7 +26,7 @@ $on(
 
 chrome.storage.sync.get('defaultnewtab', function(storage) {
     if (storage.defaultnewtab) {
-        chrome.tabs.update({ url: 'chrome-extension://laookkfknpbbblfpciffpaejjkokdgca/dashboard.html' });
+        // chrome.tabs.update({ url: 'chrome-extension://laookkfknpbbblfpciffpaejjkokdgca/dashboard.html' });
     }
 });
 
@@ -135,21 +135,25 @@ function handleSearchClick() {
 
 function showResult(repositories) {
     const searchResult = qs('.search-result');
-    let innerResult = '';
+    let innerResult = '<ul>';
 
+    console.log(repositories)
     for (const repo of repositories) {
         innerResult += `
-			<div style="border-bottom:1px solid #aaa;">
-				${repo.a_fullName} / ${repo.b_language} / ${repo.c_starCount} / ${repo.d_description}
-				<button class="btn-subscribe"
-					data-fullname="${repo.a_fullName}"
-					data-language="${repo.b_language}"
-					data-starcount="${repo.c_starCount}"
-					data-description="${repo.d_description}"
-				>추가</button>
-			</div>
-		`;
+            <li class="list">
+                <div>
+                    <a target="_blank" href=${repo.html_url}>${repo.a_fullName}</a> / ${repo.b_language} / ${repo.c_starCount}
+                    <button class="btn-subscribe"
+                        data-fullname="${repo.a_fullName}"
+                        data-language="${repo.b_language}"
+                        data-starcount="${repo.c_starCount}"
+                        data-description="${repo.d_description}"
+                    >추가</button>
+                </div>
+            </li>`;
     }
+
+    innerResult += '</ul>'
 
     searchResult.innerHTML = innerResult;
 

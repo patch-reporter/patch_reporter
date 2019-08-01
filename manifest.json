@@ -1,6 +1,6 @@
 {
-    "name": "Hello Extensions",
-    "description": "Base Level Extension",
+    "name": "Patch Reporter",
+    "description": "Subscribe open source libraries that published on Github. you can easily check the Release Note of the library you are using.",
     "version": "1.0",
     "options_page": "options.html",
     "browser_action": {

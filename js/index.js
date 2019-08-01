@@ -22,6 +22,7 @@ chrome.storage.sync.get(null, function(result) {
 
 function renderReleaseList(releases) {
     let inner = '';
+    console.log(releases)
     for (let release of releases) {
         let body = converter.makeHtml(release.body);
         let repo = release.url.replace(/https:\/\/api.github.com\/repos\/(.*)\/releases\/.*/, '$1');
@@ -29,10 +30,11 @@ function renderReleaseList(releases) {
         inner += `
 			<div class="flex__row--wrap">
 				<div class="release__note--library-name">
-					<h3>${repo}</h3>
+                    <a target="_blank" href=${release.html_url}><h3>${repo}</h3></a>
+                    <h4>version: ${release.tag_name}</h4>
 					<p>created: ${getCurrentTime(release.created_at)}</p>
 				</div>
-				<div class="release__timeline-contents">
+                <div class="release__timeline-contents">
 					<div class="release__timeline-contents-body">
 						${body}
 					</div>

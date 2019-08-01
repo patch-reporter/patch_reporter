@@ -1,5 +1,10 @@
+html, body {
+    overflow: hidden;
+}
+
 .modal {
     visibility: hidden;
+    overflow: scroll;
 }
 
 .modal__overlay {
@@ -14,12 +19,12 @@
 .modal__contents {
     overflow: auto;
     background-color: #fff;
-    width: 32rem;
+    width: 40rem;
+    height: 40rem;
     position: absolute;
     left: 50%;
     margin-left: -16rem;
     top: 3rem;
-    min-height: 32rem;
     padding: 70px 20px 40px;
 }
 
