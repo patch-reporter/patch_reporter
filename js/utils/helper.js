@@ -114,3 +114,16 @@ export function getCurrentTime(t) {
 
     return month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ':' + fixedSeconds;
 }
+
+/**
+ * Toggle loading bounce
+ * @param {boolean} loading
+ */
+export function toggleLoading(loading) {
+    const loader = qs('.loading');
+    if (loading) {
+        loader.classList.remove('hide');
+    } else {
+        loader.classList.add('hide');
+    }
+}
