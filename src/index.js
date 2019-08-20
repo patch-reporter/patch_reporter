@@ -1,5 +1,8 @@
-import { fetchReleaseNotes } from './service/github.js';
-import { qs, getCurrentTime, $delegate, $on, toggleLoading } from './utils/helper.js';
+import showdown from 'showdown';
+import { fetchReleaseNotes } from './service/github';
+import { qs, getCurrentTime, $on, toggleLoading } from './utils/helper';
+import './styles/index.css';
+const { chrome } = global;
 
 const converter = new showdown.Converter();
 

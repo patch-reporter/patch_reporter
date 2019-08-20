@@ -1,0 +1,65 @@
+{
+    "name": "patch_reporter",
+    "version": "1.0.0",
+    "description": "patch_reporter",
+    "private": true,
+    "author": "Raphael",
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/patch-reporter/patch_reporter"
+    },
+    "license": "MIT",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "webpack --env.NODE_ENV=production --config ./config/webpack.config.js --watch",
+        "build": "webpack --env.NODE_ENV=production --config ./config/webpack.config.js"
+    },
+    "babel": {
+        "presets": [
+            "@babel/preset-env"
+        ]
+    },
+    "devDependencies": {
+        "@babel/core": "^7.4.0",
+        "@babel/preset-env": "^7.4.2",
+        "babel-loader": "^8.0.5",
+        "clean-webpack-plugin": "^2.0.1",
+        "copy-webpack-plugin": "^5.0.4",
+        "css-loader": "^2.1.1",
+        "error-overlay-webpack-plugin": "^0.4.0",
+        "eslint": "^5.15.3",
+        "eslint-config-standard": "^12.0.0",
+        "eslint-loader": "^2.1.2",
+        "eslint-plugin-import": "^2.16.0",
+        "eslint-plugin-node": "^8.0.1",
+        "eslint-plugin-promise": "^4.0.1",
+        "eslint-plugin-standard": "^4.0.0",
+        "file-loader": "^3.0.1",
+        "format-messages-webpack-plugin": "^1.1.0",
+        "html-webpack-plugin": "^3.2.0",
+        "inline-manifest-webpack-plugin": "^4.0.2",
+        "mini-css-extract-plugin": "^0.5.0",
+        "new": "^0.1.1",
+        "optimize-css-assets-webpack-plugin": "^5.0.1",
+        "postcss-flexbugs-fixes": "^4.1.0",
+        "postcss-loader": "^3.0.0",
+        "postcss-preset-env": "^6.6.0",
+        "postcss-safe-parser": "^4.0.1",
+        "style-loader": "^0.23.1",
+        "terser-webpack-plugin": "^1.2.3",
+        "url-loader": "^1.1.2",
+        "webpack": "^4.29.6",
+        "webpack-cli": "^3.3.0",
+        "webpack-dev-server": "^3.2.1",
+        "webpack-manifest-plugin": "^2.0.4",
+        "write-file-webpack-plugin": "^4.5.1"
+    },
+    "dependencies": {
+        "jquery": "^3.3.1",
+        "lodash": "^4.17.11",
+        "showdown": "^1.9.0"
+    },
+    "sideEffects": [
+        "*.css"
+    ]
+}

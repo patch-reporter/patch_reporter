@@ -2,7 +2,7 @@
     "name": "Patch Reporter",
     "description": "Subscribe open source libraries that published on Github. you can easily check the Release Note of the library you are using.",
     "version": "1.0",
-    "options_page": "options.html",
+    "options_page": "option.html",
     "browser_action": {
         "default_popup": "index.html",
         "default_icon": "hello_extensions.png"
@@ -17,7 +17,10 @@
             "description": "Opens hello.html"
         }
     },
-    "web_accessible_resources": ["js/api/api.js", "js/service/github.js"],
+    "background": {
+        "scripts": ["assets/js/app.bundle.js"],
+        "persistent": false
+    },
     "chrome_url_overrides": {
         "newtab": "index.html"
     },

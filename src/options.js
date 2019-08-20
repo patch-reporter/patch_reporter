@@ -1,5 +1,8 @@
-import { fetchRepositories } from './service/github.js';
-import { qs, qsa, $on } from './utils/helper.js';
+import { fetchRepositories } from './service/github';
+import { qs, qsa, $on } from './utils/helper';
+import './styles/reset.css';
+import './styles/index.css';
+import './styles/option.css';
 
 const defaultTheme = qs('.default__theme');
 const patchTmeme = qs('.patch-reporter__theme');
@@ -137,12 +140,14 @@ function showResult(repositories) {
     const searchResult = qs('.search-result');
     let innerResult = '<ul>';
 
-    console.log(repositories)
+    console.log(repositories);
     for (const repo of repositories) {
         innerResult += `
             <li class="list">
                 <div>
-                    <a target="_blank" href=${repo.html_url}>${repo.a_fullName}</a> / ${repo.b_language} / ${repo.c_starCount}
+                    <a target="_blank" href=${repo.html_url}>${repo.a_fullName}</a> / ${repo.b_language} / ${
+            repo.c_starCount
+        }
                     <button class="btn-subscribe"
                         data-fullname="${repo.a_fullName}"
                         data-language="${repo.b_language}"
@@ -153,7 +158,7 @@ function showResult(repositories) {
             </li>`;
     }
 
-    innerResult += '</ul>'
+    innerResult += '</ul>';
 
     searchResult.innerHTML = innerResult;
 

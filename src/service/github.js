@@ -1,8 +1,7 @@
+import { sendApi } from '../api/api.js';
 const GET = 'GET';
 
 const GITHUB_API = 'https://api.github.com';
-
-import { sendApi } from '../api/api.js';
 
 export function fetchReleaseNotes(owner, repo) {
     return sendApi({
