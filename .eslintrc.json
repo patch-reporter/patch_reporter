@@ -1,7 +1,8 @@
 {
     "extends": "standard",
     "env": {
-        "browser": true
+        "browser": true,
+        "webextensions": true
     },
     "rules": {
         "indent": ["off", 4],
@@ -9,6 +10,7 @@
         "space-before-function-paren": 0,
         "comma-dangle": 0,
         "camelcase": 0,
-        "semi": 0
+        "semi": 0,
+        "no-tabs": 0
     }
 }

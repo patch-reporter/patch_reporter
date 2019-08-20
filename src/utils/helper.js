@@ -127,3 +127,7 @@ export function toggleLoading(loading) {
         loader.classList.add('hide');
     }
 }
+
+export function loadElements(target, contents) {
+    target.innerHTML = contents;
+}

@@ -4,8 +4,11 @@
     "version": "1.0",
     "options_page": "option.html",
     "browser_action": {
-        "default_popup": "index.html",
-        "default_icon": "hello_extensions.png"
+        "default_icon": "patch_reporter_logo.png"
+    },
+    "background": {
+        "scripts": ["assets/js/background.bundle.js"],
+        "persistent": false
     },
     "manifest_version": 2,
     "commands": {
@@ -16,10 +19,6 @@
             },
             "description": "Opens hello.html"
         }
-    },
-    "background": {
-        "scripts": ["assets/js/app.bundle.js"],
-        "persistent": false
     },
     "chrome_url_overrides": {
         "newtab": "index.html"

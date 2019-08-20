@@ -20,9 +20,10 @@ const resolveApp = function(relativePath) {
 const paths = {
     appPath: resolveApp('src/index.js'),
     appHtml: resolveApp('public/index.html'),
+    backgroundPath: resolveApp('src/background.js'),
     buildPath: resolveApp('dist'),
     manifestPath: resolveApp('public/manifest.json'),
-    iconPath: resolveApp('public/hello_extensions.png'),
+    iconPath: resolveApp('public/patch_reporter_logo.png'),
     appSrc: resolveApp('src'),
     appPublic: resolveApp('public'),
     appNodeModules: resolveApp('node_modules'),
@@ -39,10 +40,11 @@ module.exports = env => {
         entry: {
             app: paths.appPath,
             options: paths.optionSrc,
+            background: paths.backgroundPath,
         },
         output: {
             filename: isEnvProduction
-                ? 'assets/js/[name].[chunkhash:8].js'
+                ? 'assets/js/[name].bundle.js' // ? 'assets/js/[name].[chunkhash:8].js'
                 : isEnvDevelopment && 'assets/js/[name].bundle.js',
             path: isEnvProduction ? paths.buildPath : undefined,
         },

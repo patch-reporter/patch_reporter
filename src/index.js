@@ -1,12 +1,25 @@
 import showdown from 'showdown';
 import { fetchReleaseNotes } from './service/github';
-import { qs, getCurrentTime, $on, toggleLoading } from './utils/helper';
+import { qs, getCurrentTime, $on, loadElements, toggleLoading } from './utils/helper';
 import './styles/index.css';
-const { chrome } = global;
+import settingIcon from './assets/icons/setting.svg';
 
 const converter = new showdown.Converter();
 
 let history = [];
+$on(window, 'load', function() {
+    const iconWrap = qs('.icon__wrap');
+
+    const optionUrl = chrome.runtime.getURL('option.html');
+    console.log(optionUrl);
+    loadElements(
+        iconWrap,
+        `
+    <a target="_blank" href=${optionUrl}>
+        <img src=${settingIcon} width="30" />
+    </a>`
+    );
+});
 const loadMore = qs('.loadMore');
 $on(
     loadMore,
@@ -35,15 +48,14 @@ chrome.storage.sync.get(null, function(result) {
     });
 });
 
-
 function renderReleaseList(releases) {
-	let inner = '';
-	console.log(releases)
-	for (let release of releases) {
-		let body = converter.makeHtml(release.body)
-		let repo = release.url.replace(/https:\/\/api.github.com\/repos\/(.*)\/releases\/.*/, '$1')
+    let inner = '';
+    console.log(releases);
+    for (let release of releases) {
+        let body = converter.makeHtml(release.body);
+        let repo = release.url.replace(/https:\/\/api.github.com\/repos\/(.*)\/releases\/.*/, '$1');
 
-		inner += `
+        inner += `
 			<div class="releases__item-wrapper">
 				<div>${getCurrentTime(release.created_at)}</div>
 				<div class="releases__item">
@@ -65,7 +77,7 @@ function renderReleaseList(releases) {
 				</div>
 			</div>
 		`;
-	}
+    }
 
-	qs('.releases').innerHTML = inner;
+    qs('.releases').innerHTML = inner;
 }
