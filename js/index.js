@@ -32,49 +32,37 @@ chrome.storage.sync.get(null, function(result) {
     });
 });
 
+
 function renderReleaseList(releases) {
-    for (let i = 0; i < releases.length; i++) {
-        const release = releases[i];
-        let body = converter.makeHtml(release.body);
-        let repo = release.url.replace(/https:\/\/api.github.com\/repos\/(.*)\/releases\/.*/, '$1');
+	let inner = '';
+	console.log(releases)
+	for (let release of releases) {
+		let body = converter.makeHtml(release.body)
+		let repo = release.url.replace(/https:\/\/api.github.com\/repos\/(.*)\/releases\/.*/, '$1')
 
-        const rowEl = document.createElement('article');
-        rowEl.classList.add('flex__row--wrap');
+		inner += `
+			<div class="releases__item-wrapper">
+				<div>${getCurrentTime(release.created_at)}</div>
+				<div class="releases__item">
+					<div class="releases__item__title">
+						<div style="display:flex">
+							<div>
+								<div class="releases__item__title__version">
+									<img src="assets/icons/tag.svg" width="12" />${release.tag_name}
+								</div>
+								<div class="releases__item__title__name">
+									<a target="_blank" href=${release.html_url}>${repo}</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="releases__item__contents">
+						${body}
+					</div>
+				</div>
+			</div>
+		`;
+	}
 
-        const containerEl = document.createElement('div');
-        containerEl.classList.add('release__note--library-name');
-
-        const htmlUrlEl = document.createElement('a');
-        htmlUrlEl.setAttribute('target', '_blank');
-        htmlUrlEl.setAttribute('href', release.html_url);
-
-        const nameEl = document.createElement('h3');
-        nameEl.appendChild(document.createTextNode(repo));
-        htmlUrlEl.appendChild(nameEl);
-
-        const tagNameEl = document.createElement('h4');
-        tagNameEl.appendChild(document.createTextNode(`version: ${release.tag_name}`));
-
-        const createdEl = document.createElement('p');
-        createdEl.appendChild(document.createTextNode(`created: ${getCurrentTime(release.created_at)}`));
-
-        containerEl.appendChild(htmlUrlEl);
-        containerEl.appendChild(tagNameEl);
-        containerEl.appendChild(createdEl);
-
-        const timelineEl = document.createElement('div');
-        timelineEl.classList.add('release__timeline-contents');
-
-        const contentsEl = document.createElement('div');
-        contentsEl.classList.add('release__timeline-contents-body');
-        contentsEl.innerHTML = body;
-
-        timelineEl.appendChild(contentsEl);
-
-        rowEl.appendChild(containerEl);
-        rowEl.appendChild(timelineEl);
-
-        const releaseNote = qs('.release__note');
-        releaseNote.appendChild(rowEl);
-    }
+	qs('.releases').innerHTML = inner;
 }
