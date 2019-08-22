@@ -1,5 +1,5 @@
 import { fetchRepositories } from './service/github';
-import { qs, qsa, $on, $delegate } from './utils/helper';
+import { qs, qsa, $on, $delegate, filterObject } from './utils/helper';
 import { setStorage, getStorage } from './utils/storage';
 import starIcon from './assets/icons/star.svg';
 import externalLinkIcon from './assets/icons/external-link.svg';
@@ -125,6 +125,8 @@ function removeSubscribedLibrary(e) {
     getStorage('repositories').then(result => {
         const repositories = result.repositories;
         console.log(repositories);
+        const newRepositories = filterObject(repositories, repo => repo.fullName !== fullname);
+        setStorage('repositories', newRepositories, getSubscribedLibraries);
     });
 }
 

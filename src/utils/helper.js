@@ -121,7 +121,10 @@ export function getCurrentDate(t) {
     const month = date.getMonth() + 1;
     const day = date.getDate();
 
-    return `${year}/${('0' + month).substr(('0' + month).length - 2, 2)}/${('0' + day).substr(('0' + day).length - 2, 2)}`;
+    return `${year}/${('0' + month).substr(('0' + month).length - 2, 2)}/${('0' + day).substr(
+        ('0' + day).length - 2,
+        2
+    )}`;
 }
 
 /**
@@ -141,18 +144,17 @@ export function loadElements(target, contents) {
     target.innerHTML = contents;
 }
 
-
 /**
  * Filter object
  * @param {object} obj
  * @param {function} callbackfn
  */
 export function filterObject(obj, callbackfn) {
-	let filteredKey = Object.keys(obj).filter(key => callbackfn(obj[key]));
-	let result = {};
-	filteredKey.forEach((key) => {
-		// Todo. DeepCopy 필요
-		result[key] = obj[key];
-	});
-	return result;
+    let filteredKey = Object.keys(obj).filter(key => callbackfn(obj[key]));
+    let result = {};
+    filteredKey.forEach(key => {
+        // Todo. DeepCopy 필요
+        result[key] = obj[key];
+    });
+    return result;
 }
