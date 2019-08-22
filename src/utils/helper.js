@@ -115,6 +115,15 @@ export function getCurrentTime(t) {
     return month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ':' + fixedSeconds;
 }
 
+export function getCurrentDate(t) {
+    const date = new Date(t);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    return `${year}/${('0' + month).substr(('0' + month).length - 2, 2)}/${('0' + day).substr(('0' + day).length - 2, 2)}`;
+}
+
 /**
  * Toggle loading bounce
  * @param {boolean} loading
@@ -130,4 +139,20 @@ export function toggleLoading(loading) {
 
 export function loadElements(target, contents) {
     target.innerHTML = contents;
+}
+
+
+/**
+ * Filter object
+ * @param {object} obj
+ * @param {function} callbackfn
+ */
+export function filterObject(obj, callbackfn) {
+	let filteredKey = Object.keys(obj).filter(key => callbackfn(obj[key]));
+	let result = {};
+	filteredKey.forEach((key) => {
+		// Todo. DeepCopy 필요
+		result[key] = obj[key];
+	});
+	return result;
 }
