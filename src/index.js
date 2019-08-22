@@ -3,6 +3,7 @@ import { fetchReleaseNotes } from './service/github';
 import { qs, getCurrentDate, $on, loadElements, toggleLoading } from './utils/helper';
 import './styles/index.css';
 import settingIcon from './assets/icons/setting.svg';
+import { getStorage } from './utils/storage';
 
 const converter = new showdown.Converter();
 
@@ -19,7 +20,27 @@ $on(window, 'load', function() {
         <img src="${settingIcon}" width="30" />
     </a>`
     );
+
+    getStorage('repositories').then(result => {
+        const repositories = result.repositories;
+        toggleLoading(true);
+        Promise.all(
+            Object.values(repositories).map(({ fullName }) =>
+                fetchReleaseNotes(fullName.split('/')[0], fullName.split('/')[1])
+            )
+        ).then(releases => {
+            // 일단 구현 했는데, 더 빠른 방법이 있을 수도
+            releases.forEach(rels => {
+                history = [...history, ...rels];
+            });
+            history.sort((a, b) => (a.published_at > b.published_at ? -1 : 1));
+            toggleLoading(false);
+
+            renderReleaseList(history, repositories);
+        });
+    });
 });
+
 const loadMore = qs('.loadMore');
 $on(
     loadMore,
@@ -29,22 +50,6 @@ $on(
     },
     false
 );
-
-chrome.storage.sync.get(null, function(result) {
-    toggleLoading(true);
-    Promise.all(
-        Object.values(result).map(({ fullName }) => fetchReleaseNotes(fullName.split('/')[0], fullName.split('/')[1]))
-    ).then(releases => {
-        // 일단 구현 했는데, 더 빠른 방법이 있을 수도
-        releases.forEach(rels => {
-            history = [...history, ...rels];
-        });
-        history.sort((a, b) => (a.published_at > b.published_at ? -1 : 1));
-        toggleLoading(false);
-
-        renderReleaseList(history, result);
-    });
-});
 
 function renderReleaseList(releases, data) {
     let inner = '';
