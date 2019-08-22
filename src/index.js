@@ -33,9 +33,7 @@ $on(
 chrome.storage.sync.get(null, function(result) {
     toggleLoading(true);
     Promise.all(
-        Object.values(result).map(({ a_fullname }) =>
-            fetchReleaseNotes(a_fullname.split('/')[0], a_fullname.split('/')[1])
-        )
+        Object.values(result).map(({ fullName }) => fetchReleaseNotes(fullName.split('/')[0], fullName.split('/')[1]))
     ).then(result => {
         // 일단 구현 했는데, 더 빠른 방법이 있을 수도
         result.forEach(rels => {

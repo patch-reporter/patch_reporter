@@ -1,5 +1,8 @@
 import { fetchRepositories } from './service/github';
-import { qs, qsa, $on } from './utils/helper';
+import { qs, qsa, $on, $delegate } from './utils/helper';
+import starIcon from './assets/icons/star.svg';
+import externalLinkIcon from './assets/icons/external-link.svg';
+import trashIcon from './assets/icons/trash.svg';
 import './styles/reset.css';
 import './styles/index.css';
 import './styles/option.css';
@@ -34,15 +37,16 @@ chrome.storage.sync.get('defaultnewtab', function(storage) {
 });
 
 $on(window, 'load', function() {
+    const currentRepositories = qs('.current-repositories');
     const btnSearch = qs('.btn-search');
-    const btnAdd = qs('.btn__add');
     const overlay = qs('.modal__overlay');
 
     getSubscribedLibraries();
 
     $on(btnSearch, 'click', handleSearchClick, false);
-    $on(btnAdd, 'click', openModal, false);
     $on(overlay, 'click', closeModal, false);
+    $delegate(currentRepositories, '.btn__add', 'click', openModal);
+    $delegate(currentRepositories, '.btn__delete img', 'click', removeSubscribedLibrary);
 });
 
 function openModal() {
@@ -59,58 +63,60 @@ function getSubscribedLibraries() {
     chrome.storage.sync.get(null, function(result) {
         const currentRepositories = qs('.current-repositories');
         currentRepositories.innerHTML = '';
-        currentRepositories.innerHTML += `
-            <li class="list">
-                <div class="list__item--title"><span>Name</span></div>
-                <div class="list__item--title"><span>Language</span></div>
-                <div class="list__item--title"><span>Starred</span></div>
-                <div class="list__item--title"><span>Description</span></div>
-                <div class="list__item--title"><span>Actions</span></div>
-            </li>
-        `;
         const fragment = document.createDocumentFragment();
-
         for (const repo in result) {
             const repository = result[repo];
-            const skeletonRepository = {
-                ...repository,
-                e_actions: '삭제',
-            };
-            const list = document.createElement('li');
+            const grid = document.createElement('li');
+            grid.className = 'grid-list';
+            grid.innerHTML = `
+                <div class="card">
+                    <div class="card__head">
+                        <div class="card__head--thumb">
+                            <img src="${repository.thumbnail}" alt="thumbnail" />
+                        </div>
+                        <div class="card__title--wrap">
+                            <div class="card__title">${repository.fullName}</div>
+                            <div class="card__sub-title">${repository.language}</div>
+                        </div>
+                    </div>
+                    <div class="card__body">
+                        <div class="card__body--contents">${repository.description}</div>
+                    </div>
+                    <ul class="card__actions">
+                        <li class="card__actions-btn star">
+                            <span>
+                                <img src=${starIcon} />
+                                ${repository.starCount}
+                            </span>
+                        </li>
+                        <li class="card__actions-btn github">
+                            <span>
+                                <img src="${externalLinkIcon}"/>
+                            </span>
+                        </li>
+                        <li class="card__actions-btn delete">
+                            <span class="btn__delete">
+                                <img src="${trashIcon}" data-fullname="${repository.fullName}"/>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            `;
 
-            list.className = 'list';
-            list.dataset.id = repo;
-
-            for (const property in skeletonRepository) {
-                const listItem = document.createElement('div');
-                const span = document.createElement('span');
-                const text = document.createTextNode(skeletonRepository[property]);
-
-                if (property === 'e_actions') {
-                    $on(
-                        span,
-                        'click',
-                        function() {
-                            removeSubscribedLibrary(skeletonRepository.a_fullname);
-                        },
-                        false
-                    );
-                }
-
-                listItem.className = 'list__item';
-                span.appendChild(text);
-                listItem.appendChild(span);
-                list.appendChild(listItem);
-            }
-            fragment.appendChild(list);
+            fragment.appendChild(grid);
         }
-
+        const plusCard = document.createElement('li');
+        plusCard.className = 'grid-list';
+        plusCard.innerHTML = '<button class="btn__add">추가하기</button>';
         currentRepositories.appendChild(fragment);
+        currentRepositories.appendChild(plusCard);
     });
 }
 
-function removeSubscribedLibrary(libraryName) {
-    chrome.storage.sync.remove(libraryName);
+function removeSubscribedLibrary(e) {
+    console.log(e);
+    const { fullname } = e.target.dataset;
+    chrome.storage.sync.remove(fullname);
     getSubscribedLibraries();
 }
 
@@ -126,10 +132,11 @@ function handleSearchClick() {
             response.items.map(item => {
                 return {
                     id: item.id,
-                    a_fullName: item.full_name,
-                    b_language: item.language,
-                    c_starCount: item.stargazers_count,
-                    d_description: item.description,
+                    fullName: item.full_name,
+                    language: item.language,
+                    starCount: item.stargazers_count,
+                    description: item.description,
+                    thumbnail: item.owner.avatar_url,
                 };
             })
         );
@@ -145,14 +152,13 @@ function showResult(repositories) {
         innerResult += `
             <li class="list">
                 <div>
-                    <a target="_blank" href=${repo.html_url}>${repo.a_fullName}</a> / ${repo.b_language} / ${
-            repo.c_starCount
-        }
+                    <a target="_blank" href=${repo.html_url}>${repo.fullName}</a> / ${repo.language} / ${repo.starCount}
                     <button class="btn-subscribe"
-                        data-fullname="${repo.a_fullName}"
-                        data-language="${repo.b_language}"
-                        data-starcount="${repo.c_starCount}"
-                        data-description="${repo.d_description}"
+                        data-fullname="${repo.fullName}"
+                        data-language="${repo.language}"
+                        data-starcount="${repo.starCount}"
+                        data-description="${repo.description}"
+                        data-thumbnail="${repo.thumbnail}"
                     >추가</button>
                 </div>
             </li>`;
@@ -170,18 +176,20 @@ function showResult(repositories) {
 }
 
 function subscribeRepo(e) {
-    const { fullname, language, starcount, description } = e.currentTarget.dataset;
+    const { fullname, language, starcount, description, thumbnail } = e.currentTarget.dataset;
     chrome.storage.sync.get(null, function(result) {
+        console.log(result);
         if (result[fullname]) {
             alert('이미 추가된 라이브러리입니다.');
             return;
         }
 
         const library = {
-            a_fullname: fullname,
-            b_language: language,
-            c_starcount: starcount,
-            d_description: description,
+            fullName: fullname,
+            language,
+            starCount: starcount,
+            description,
+            thumbnail,
         };
 
         chrome.storage.sync.set(

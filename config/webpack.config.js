@@ -8,7 +8,6 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const safePostCssParser = require('postcss-safe-parser');
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 const FormatMessagesWebpackPlugin = require('format-messages-webpack-plugin');
-const WriteFilePlugin = require('write-file-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const appDirectory = fs.realpathSync(process.cwd()); // 디렉토리 경로
@@ -105,6 +104,8 @@ module.exports = env => {
                             },
                         },
                         {
+                            // postcss 자체는 아무것도 하지 않고 postcss 플러그인 들이 역할 수행.
+                            // 여기선 flexbugs와 preset env같은 플러그인 추가
                             loader: require.resolve('postcss-loader'),
                             options: {
                                 // CSS import 시 필요.
@@ -127,7 +128,7 @@ module.exports = env => {
                     // oneOf 배열 내에 매칭되는 것에만 해당 모듈을 실행한다.
                     oneOf: [
                         {
-                            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+                            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
                             use: [
                                 {
                                     loader: require.resolve('url-loader'),
@@ -203,7 +204,6 @@ module.exports = env => {
             isEnvDevelopment && new FormatMessagesWebpackPlugin({ notification: false }),
             // 에러난 부분을 브라우저에서도 표시해준다.
             isEnvDevelopment && new ErrorOverlayPlugin(),
-            isEnvDevelopment && new WriteFilePlugin(),
         ].filter(Boolean),
     };
 };
