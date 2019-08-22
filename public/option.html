@@ -4,15 +4,26 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body>
-        <div>
-            <button class="default__theme">기본 테마 사용하기</button>
-            <button class="patch-reporter__theme">패치 리포터 테마 사용하기</button>
-        </div>
         <div class="container">
             <section class="box">
-                <h3 class="box-title">구독 중인 라이브러리</h3>
+                <h3 class="box__title">구독 중인 라이브러리</h3>
                 <div class="box__body">
                     <ul class="current-repositories"></ul>
+                </div>
+            </section>
+            <section class="box">
+                <h3 class="box__title">테마 설정</h3>
+                <div class="box__body">
+                    <form>
+                        <div class="chkbox">
+                            <input type="radio" name="theme" value="basic" class="default__theme" />
+                            <label> 기본 테마 사용하기</label>
+                        </div>
+                        <div class="chkbox">
+                            <input type="radio" name="theme" value="reporter" class="patch-reporter__theme" />
+                            <label>패치 리포터 테마 사용하기</label>
+                        </div>
+                    </form>
                 </div>
             </section>
         </div>

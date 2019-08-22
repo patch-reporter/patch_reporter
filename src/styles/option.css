@@ -1,3 +1,13 @@
+.box {
+    padding-top: 20px;
+    padding-bottom: 60px;
+}
+
+.box__title {
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: bold;
+}
 .current-repositories {
     display: grid;
     grid-template-columns: repeat(3, calc(33.33333% - 8px));
@@ -49,8 +59,9 @@
 
 .card__body--contents {
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: wrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .card__head--thumb img {
@@ -87,6 +98,14 @@
     width: 12px;
     height: 12px;
     cursor: pointer;
+}
+
+.chkbox {
+    margin: 15px 0;
+}
+
+.chkbox input {
+    margin-right: 8px;
 }
 
 .modal {

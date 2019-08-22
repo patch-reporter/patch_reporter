@@ -48,7 +48,6 @@ chrome.storage.sync.get(null, function(result) {
 
 function renderReleaseList(releases) {
     let inner = '';
-    console.log(releases);
     for (let release of releases) {
         let body = converter.makeHtml(release.body);
         let repo = release.url.replace(/https:\/\/api.github.com\/repos\/(.*)\/releases\/.*/, '$1');

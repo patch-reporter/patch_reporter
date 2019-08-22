@@ -1,5 +1,6 @@
 import { fetchRepositories } from './service/github';
 import { qs, qsa, $on, $delegate } from './utils/helper';
+import { setStorage, getStorage } from './utils/storage';
 import starIcon from './assets/icons/star.svg';
 import externalLinkIcon from './assets/icons/external-link.svg';
 import trashIcon from './assets/icons/trash.svg';
@@ -20,6 +21,10 @@ $on(
     },
     false
 );
+
+chrome.storage.sync.get(null, function(result) {
+    console.log(result);
+});
 
 $on(
     patchTmeme,
@@ -60,12 +65,13 @@ function closeModal() {
 }
 
 function getSubscribedLibraries() {
-    chrome.storage.sync.get(null, function(result) {
+    getStorage('repositories').then(result => {
+        const repositories = result.repositories;
         const currentRepositories = qs('.current-repositories');
         currentRepositories.innerHTML = '';
         const fragment = document.createDocumentFragment();
-        for (const repo in result) {
-            const repository = result[repo];
+        for (const repoName in repositories) {
+            const repository = repositories[repoName];
             const grid = document.createElement('li');
             grid.className = 'grid-list';
             grid.innerHTML = `
@@ -116,8 +122,10 @@ function getSubscribedLibraries() {
 function removeSubscribedLibrary(e) {
     console.log(e);
     const { fullname } = e.target.dataset;
-    chrome.storage.sync.remove(fullname);
-    getSubscribedLibraries();
+    getStorage('repositories').then(result => {
+        const repositories = result.repositories;
+        console.log(repositories);
+    });
 }
 
 function handleSearchClick() {
@@ -147,7 +155,6 @@ function showResult(repositories) {
     const searchResult = qs('.search-result');
     let innerResult = '<ul>';
 
-    console.log(repositories);
     for (const repo of repositories) {
         innerResult += `
             <li class="list">
@@ -177,28 +184,41 @@ function showResult(repositories) {
 
 function subscribeRepo(e) {
     const { fullname, language, starcount, description, thumbnail } = e.currentTarget.dataset;
-    chrome.storage.sync.get(null, function(result) {
-        console.log(result);
-        if (result[fullname]) {
-            alert('이미 추가된 라이브러리입니다.');
-            return;
-        }
-
-        const library = {
-            fullName: fullname,
-            language,
-            starCount: starcount,
-            description,
-            thumbnail,
-        };
-
-        chrome.storage.sync.set(
-            {
-                [fullname]: library,
-            },
-            function() {
-                getSubscribedLibraries();
+    getStorage('repositories')
+        .then(result => {
+            console.log(result);
+            const repositories = result.repositories;
+            if (repositories[fullname]) {
+                alert('이미 추가된 라이브러리입니다.');
+                return;
             }
-        );
-    });
+
+            const repository = {
+                fullName: fullname,
+                language,
+                starCount: starcount,
+                description,
+                thumbnail,
+            };
+
+            const newRepositories = {
+                ...repositories,
+                [fullname]: repository,
+            };
+
+            setStorage('repositories', newRepositories, getSubscribedLibraries);
+        })
+        .catch(() => {
+            const params = {
+                [fullname]: {
+                    fullName: fullname,
+                    language,
+                    starCount: starcount,
+                    description,
+                    thumbnail,
+                },
+            };
+
+            setStorage('repositories', params, getSubscribedLibraries);
+        });
 }
