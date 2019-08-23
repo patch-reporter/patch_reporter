@@ -127,7 +127,7 @@
     background-color: #fff;
     width: 40rem;
     height: 40rem;
-    position: absolute;
+    position: fixed;
     left: 50%;
     margin-left: -16rem;
     top: 3rem;
