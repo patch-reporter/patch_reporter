@@ -1,5 +1,5 @@
 import { fetchRepositories } from './service/github';
-import { qs, qsa, $on, $delegate, filterObject, numberFormat } from './utils/helper';
+import { qs, qsa, $on, $delegate, filterObject, numberFormat, replaceImageToSvg } from './utils/helper';
 import { setStorage, getStorage } from './utils/storage';
 import starIcon from './assets/icons/star.svg';
 import externalLinkIcon from './assets/icons/external-link.svg';
@@ -33,7 +33,8 @@ $on(
 
 chrome.storage.sync.get('defaultnewtab', function(storage) {
     if (storage.defaultnewtab) {
-        // chrome.tabs.update({ url: 'chrome-extension://laookkfknpbbblfpciffpaejjkokdgca/dashboard.html' });
+        chrome.storage.sync.remove('defaultnewtab');
+        // chrome.tabs.update({ url: 'chrome-search://local-ntp/local-ntp.html' });
     }
 });
 
@@ -43,7 +44,6 @@ $on(window, 'load', function() {
     const overlay = qs('.modal__overlay');
 
     getSubscribedLibraries();
-
     $on(btnSearch, 'click', handleSearchClick, false);
     $on(overlay, 'click', closeModal, false);
     $delegate(currentRepositories, '.btn__add', 'click', openModal);
@@ -98,7 +98,7 @@ function getSubscribedLibraries() {
                         </li>
                         <li class="card__actions-btn delete">
                             <span class="btn__delete">
-                                <img src="${trashIcon}" data-fullname="${repository.fullName}"/>
+                                <img class="svg" src="${trashIcon}" data-fullname="${repository.fullName}"/>
                             </span>
                         </li>
                     </ul>
@@ -112,6 +112,7 @@ function getSubscribedLibraries() {
         plusCard.innerHTML = '<button class="btn__add">+</button>';
         currentRepositories.appendChild(fragment);
         currentRepositories.appendChild(plusCard);
+        replaceImageToSvg();
     });
 }
 
