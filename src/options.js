@@ -1,5 +1,5 @@
 import { fetchRepositories } from './service/github';
-import { qs, qsa, $on, $delegate, filterObject } from './utils/helper';
+import { qs, qsa, $on, $delegate, filterObject, numberFormat } from './utils/helper';
 import { setStorage, getStorage } from './utils/storage';
 import starIcon from './assets/icons/star.svg';
 import externalLinkIcon from './assets/icons/external-link.svg';
@@ -22,10 +22,6 @@ $on(
     false
 );
 
-chrome.storage.sync.get(null, function(result) {
-    console.log(result);
-});
-
 $on(
     patchTmeme,
     'click',
@@ -43,7 +39,7 @@ chrome.storage.sync.get('defaultnewtab', function(storage) {
 
 $on(window, 'load', function() {
     const currentRepositories = qs('.current-repositories');
-    const btnSearch = qs('.btn-search');
+    const btnSearch = qs('.search__btn button');
     const overlay = qs('.modal__overlay');
 
     getSubscribedLibraries();
@@ -92,7 +88,7 @@ function getSubscribedLibraries() {
                         <li class="card__actions-btn star">
                             <span>
                                 <img src=${starIcon} />
-                                ${repository.starCount}
+                                ${numberFormat(repository.starCount)}
                             </span>
                         </li>
                         <li class="card__actions-btn github">
@@ -113,31 +109,28 @@ function getSubscribedLibraries() {
         }
         const plusCard = document.createElement('li');
         plusCard.className = 'grid-list';
-        plusCard.innerHTML = '<button class="btn__add">추가하기</button>';
+        plusCard.innerHTML = '<button class="btn__add">+</button>';
         currentRepositories.appendChild(fragment);
         currentRepositories.appendChild(plusCard);
     });
 }
 
 function removeSubscribedLibrary(e) {
-    console.log(e);
     const { fullname } = e.target.dataset;
     getStorage('repositories').then(result => {
         const repositories = result.repositories;
-        console.log(repositories);
         const newRepositories = filterObject(repositories, repo => repo.fullName !== fullname);
         setStorage('repositories', newRepositories, getSubscribedLibraries);
     });
 }
 
 function handleSearchClick() {
-    const inputSearch = qs('.input-search');
+    const inputSearch = qs('.search__input');
     const query = inputSearch.value;
     if (!query) {
         return;
     }
     fetchRepositories(query).then(response => {
-        console.log(response);
         showResult(
             response.items.map(item => {
                 return {
@@ -147,6 +140,7 @@ function handleSearchClick() {
                     starCount: item.stargazers_count,
                     description: item.description,
                     thumbnail: item.owner.avatar_url,
+                    htmlUrl: item.html_url,
                 };
             })
         );
@@ -154,26 +148,29 @@ function handleSearchClick() {
 }
 
 function showResult(repositories) {
-    const searchResult = qs('.search-result');
-    let innerResult = '<ul>';
+    const searchResult = qs('.search-result ul');
+    let innerResult = '';
 
     for (const repo of repositories) {
         innerResult += `
-            <li class="list">
-                <div>
-                    <a target="_blank" href=${repo.html_url}>${repo.fullName}</a> / ${repo.language} / ${repo.starCount}
+            <li class="list__item">
+                <div class="list__col">
+                    <img class="thumbnail" src="${repo.thumbnail}" />
+                    <a target="_blank" href=${repo.htmlUrl}>${repo.fullName}</a>
+                </div>
+                <div class="list__col">${repo.language}</div>
+                <div class="list__col">${repo.starCount}</div>
+                <div class="list__col">
                     <button class="btn-subscribe"
                         data-fullname="${repo.fullName}"
                         data-language="${repo.language}"
-                        data-starcount="${repo.starCount}"
+                        data-starcount="${numberFormat(repo.starCount)}"
                         data-description="${repo.description}"
                         data-thumbnail="${repo.thumbnail}"
                     >추가</button>
                 </div>
             </li>`;
     }
-
-    innerResult += '</ul>';
 
     searchResult.innerHTML = innerResult;
 
@@ -188,7 +185,6 @@ function subscribeRepo(e) {
     const { fullname, language, starcount, description, thumbnail } = e.currentTarget.dataset;
     getStorage('repositories')
         .then(result => {
-            console.log(result);
             const repositories = result.repositories;
             if (repositories[fullname]) {
                 alert('이미 추가된 라이브러리입니다.');

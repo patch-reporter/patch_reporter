@@ -158,3 +158,15 @@ export function filterObject(obj, callbackfn) {
     });
     return result;
 }
+/**
+ * @param {number} value
+ * @return {number | string}
+ */
+export function numberFormat(value) {
+    if (value >= 1000) {
+        let _value = value / 1000;
+        return parseFloat(_value).toFixed(1) + 'k';
+    } else {
+        return value;
+    }
+}

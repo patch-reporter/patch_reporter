@@ -31,13 +31,21 @@
         <div class="modal">
             <div class="modal__overlay"></div>
             <div class="modal__contents">
-                <h3 class="modal__title">구독 할 라이브러리</h3>
+                <h3 class="modal__title">라이브러리 추가하기</h3>
                 <div class="modal__body">
-                    <div class="modal__body--search">
-                        <input type="text" class="input-search" />
-                        <button class="btn-search">검색</button>
+                    <span class="modal__body--search">
+                        <input type="text" class="search__input" />
+                        <span class="search__btn"><button type="button">검색</button></span>
+                    </span>
+                    <div class="search-result">
+                        <div class="list__item head">
+                            <div class="list__col">이름</div>
+                            <div class="list__col">언어</div>
+                            <div class="list__col">스타 수</div>
+                            <div class="list__col"></div>
+                        </div>
+                        <ul class="list"></ul>
                     </div>
-                    <div class="search-result"></div>
                 </div>
             </div>
         </div>
