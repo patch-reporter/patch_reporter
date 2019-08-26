@@ -8,7 +8,15 @@ import { getStorage } from './utils/storage';
 const converter = new showdown.Converter();
 
 let history = [];
+
 $on(window, 'load', function() {
+    chrome.storage.sync.get('defaultnewtab', function(storage) {
+        if (storage.defaultnewtab) {
+            // chrome.storage.sync.remove('defaultnewtab');
+            chrome.tabs.update({ url: 'chrome-search://local-ntp/local-ntp.html' });
+        }
+    });
+
     const iconWrap = qs('.icon__wrap');
 
     const optionUrl = chrome.runtime.getURL('option.html');

@@ -172,9 +172,7 @@ export function numberFormat(value) {
 }
 
 export function replaceImageToSvg() {
-    console.log('replace');
     document.querySelectorAll('img.svg').forEach(img => {
-        console.log(img);
         const imgID = img.id;
         const imgClass = img.className;
         const imgURL = img.src;

@@ -8,42 +8,48 @@ import './styles/reset.css';
 import './styles/index.css';
 import './styles/option.css';
 
-const defaultTheme = qs('.default__theme');
-const patchTmeme = qs('.patch-reporter__theme');
-$on(
-    defaultTheme,
-    'click',
-    function() {
-        chrome.storage.sync.get(null, function(result) {
-            console.log(result);
-        });
-        chrome.storage.sync.set({ defaultnewtab: true });
-    },
-    false
-);
-
-$on(
-    patchTmeme,
-    'click',
-    function() {
-        chrome.storage.sync.remove('defaultnewtab');
-    },
-    false
-);
-
-chrome.storage.sync.get('defaultnewtab', function(storage) {
-    if (storage.defaultnewtab) {
-        chrome.storage.sync.remove('defaultnewtab');
-        // chrome.tabs.update({ url: 'chrome-search://local-ntp/local-ntp.html' });
-    }
-});
-
 $on(window, 'load', function() {
     const currentRepositories = qs('.current-repositories');
     const btnSearch = qs('.search__btn button');
     const overlay = qs('.modal__overlay');
+    const defaultTheme = qs('.default__theme');
+    const patchTheme = qs('.patch-reporter__theme');
+
+    chrome.storage.sync.get('defaultnewtab', result => {
+        console.log(result.defaultnewtab);
+        const { defaultnewtab } = result;
+        if (defaultnewtab) {
+            defaultTheme.checked = true;
+            patchTheme.checked = false;
+        } else {
+            defaultTheme.checked = false;
+            patchTheme.checked = true;
+        }
+    });
+
+    $on(
+        defaultTheme,
+        'click',
+        function() {
+            chrome.storage.sync.get(null, function(result) {
+                console.log(result);
+            });
+            chrome.storage.sync.set({ defaultnewtab: true });
+        },
+        false
+    );
+
+    $on(
+        patchTheme,
+        'click',
+        function() {
+            chrome.storage.sync.remove('defaultnewtab');
+        },
+        false
+    );
 
     getSubscribedLibraries();
+
     $on(btnSearch, 'click', handleSearchClick, false);
     $on(overlay, 'click', closeModal, false);
     $delegate(currentRepositories, '.btn__add', 'click', openModal);
