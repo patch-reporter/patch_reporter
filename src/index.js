@@ -141,11 +141,9 @@ function toggleBody(e) {
 	const $itemBody = qs('.release-' + id + ' .releases__item__contents__body');
 
 	if($item.classList.contains('opened')) {
-		console.log('opne to close');
 		$item.classList.remove('opened');
 		$itemBody.style.maxHeight = '90px';
 	} else {
-		console.log('close to open', $itemBody.scrollHeight);
 		$item.classList.add('opened');
 		$itemBody.style.maxHeight = $itemBody.scrollHeight + 'px';
 	}
