@@ -12,6 +12,7 @@ export function getStorage(key) {
         });
     });
 }
+
 /**
  * @param {string} key
  * @param {*} value

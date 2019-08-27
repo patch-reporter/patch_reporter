@@ -9,16 +9,22 @@ import { getStorage } from './utils/storage';
 const converter = new showdown.Converter();
 
 let history = [];
+
 $on(window, 'load', function() {
+	chrome.storage.sync.get('defaultnewtab', function(storage) {
+		if (storage.defaultnewtab) {
+			// chrome.storage.sync.remove('defaultnewtab');
+			chrome.tabs.update({ url: 'chrome-search://local-ntp/local-ntp.html' });
+		}
+	});
+
     const settingBtnWrap = qs('.setting-btn-wrapper');
     const optionUrl = chrome.runtime.getURL('option.html');
     let repositories;
 
     loadElements(
 		settingBtnWrap,
-        `<a target="_blank" href=${optionUrl}>
-			<img src="${settingIcon}" width="30" />
-		</a>`
+        `<a target="_blank" href=${optionUrl}><img src="${settingIcon}" width="30" /></a>`
     );
 
 	toggleLoading(true);
