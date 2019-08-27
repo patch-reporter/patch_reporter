@@ -16,7 +16,6 @@ $on(window, 'load', function() {
     const patchTheme = qs('.patch-reporter__theme');
 
     chrome.storage.sync.get('defaultnewtab', result => {
-        console.log(result.defaultnewtab);
         const { defaultnewtab } = result;
         if (defaultnewtab) {
             defaultTheme.checked = true;
@@ -53,7 +52,8 @@ $on(window, 'load', function() {
     $on(btnSearch, 'click', handleSearchClick, false);
     $on(overlay, 'click', closeModal, false);
     $delegate(currentRepositories, '.btn__add', 'click', openModal);
-    $delegate(currentRepositories, '.btn__delete img', 'click', removeSubscribedLibrary);
+    $delegate(currentRepositories, '.btn__delete', 'click', removeSubscribedLibrary);
+    $delegate(currentRepositories, '.btn__delete svg', 'click', removeSubscribedLibrary);
 });
 
 function openModal() {
@@ -103,7 +103,7 @@ function getSubscribedLibraries() {
                             </span>
                         </li>
                         <li class="card__actions-btn delete">
-                            <span class="btn__delete">
+                            <span class="btn__delete" data-fullname="${repository.fullName}">
                                 <img class="svg" src="${trashIcon}" data-fullname="${repository.fullName}"/>
                             </span>
                         </li>

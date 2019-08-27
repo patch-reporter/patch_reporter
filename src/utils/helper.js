@@ -175,8 +175,10 @@ export function replaceImageToSvg() {
     document.querySelectorAll('img.svg').forEach(img => {
         const imgID = img.id;
         const imgClass = img.className;
+        const imgDataset = img.dataset;
         const imgURL = img.src;
 
+        console.log(imgDataset);
         fetch(imgURL)
             .then(response => {
                 return response.text();
@@ -195,6 +197,10 @@ export function replaceImageToSvg() {
                 // Add replaced image's classes to the new SVG
                 if (typeof imgClass !== 'undefined') {
                     svg.setAttribute('class', imgClass + ' replaced-svg');
+                }
+
+                if (typeof imgDataset !== 'undefined') {
+                    svg.dataset.fullname = imgDataset.fullname;
                 }
 
                 // Remove any invalid XML tags as per http://validator.w3.org
