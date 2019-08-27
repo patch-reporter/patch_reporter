@@ -6,22 +6,37 @@
     <body>
         <div class="container">
             <section class="box">
-                <h3 class="box__title">구독 중인 라이브러리</h3>
+                <h3 class="box__title subscribing">구독 중인 라이브러리</h3>
                 <div class="box__body">
                     <ul class="current-repositories"></ul>
                 </div>
             </section>
             <section class="box">
-                <h3 class="box__title">테마 설정</h3>
+                <h3 class="box__title language">언어</h3>
                 <div class="box__body">
                     <form>
                         <div class="chkbox">
-                            <input type="radio" name="theme" value="basic" class="default__theme" />
-                            <label> 기본 테마 사용하기</label>
+                            <input type="radio" name="language" value="ko" class="lan-ko" />
+                            <label>한국어 (Korean)</label>
                         </div>
                         <div class="chkbox">
-                            <input type="radio" name="theme" value="reporter" class="patch-reporter__theme" />
-                            <label>패치 리포터 테마 사용하기</label>
+                            <input type="radio" name="language" value="en" class="lan-en" />
+                            <label>영어 (English)</label>
+                        </div>
+                    </form>
+                </div>
+            </section>
+            <section class="box">
+                <h3 class="box__title settingNewTab">새로운 탭 설정</h3>
+                <div class="box__body">
+                    <form>
+                        <div class="chkbox">
+                            <input type="radio" name="tab" value="basic" class="default__tab" />
+                            <label class="defaultNewTab"> 기본 크롬 탭</label>
+                        </div>
+                        <div class="chkbox">
+                            <input type="radio" name="tab" value="reporter" class="patch-reporter__tab" />
+                            <label class="patchReporterTab">패치 리포터 탭</label>
                         </div>
                     </form>
                 </div>
@@ -31,17 +46,17 @@
         <div class="modal">
             <div class="modal__overlay"></div>
             <div class="modal__contents">
-                <h3 class="modal__title">라이브러리 추가하기</h3>
+                <h3 class="modal__title addLibraries">라이브러리 추가하기</h3>
                 <div class="modal__body">
                     <span class="modal__body--search">
                         <input type="text" class="search__input" />
-                        <span class="search__btn"><button type="button">검색</button></span>
+                        <span class="search__btn"><button type="button" class="search">검색</button></span>
                     </span>
                     <div class="search-result">
                         <div class="list__item head">
-                            <div class="list__col">이름</div>
-                            <div class="list__col">언어</div>
-                            <div class="list__col">스타 수</div>
+                            <div class="list__col name">이름</div>
+                            <div class="list__col languageModal">언어</div>
+                            <div class="list__col starred">스타 수</div>
                             <div class="list__col"></div>
                         </div>
                         <ul class="list"></ul>

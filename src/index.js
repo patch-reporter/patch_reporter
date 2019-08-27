@@ -1,9 +1,9 @@
 import showdown from 'showdown';
 import { fetchReleaseNotes } from './service/github';
 import { qs, getCurrentDate, $on, loadElements, toggleLoading } from './utils/helper';
+import { getStorage } from './utils/storage';
 import './styles/index.css';
 import settingIcon from './assets/icons/setting.svg';
-import { getStorage } from './utils/storage';
 
 const converter = new showdown.Converter();
 
@@ -20,7 +20,6 @@ $on(window, 'load', function() {
     const iconWrap = qs('.icon__wrap');
 
     const optionUrl = chrome.runtime.getURL('option.html');
-    console.log(optionUrl);
     loadElements(
         iconWrap,
         `
@@ -61,8 +60,6 @@ $on(
 
 function renderReleaseList(releases, data) {
     let inner = '';
-    console.log(data);
-    console.log(releases);
     for (let release of releases) {
         let body = converter.makeHtml(release.body);
         let repoName = release.url.replace(/https:\/\/api.github.com\/repos\/(.*)\/releases\/.*/, '$1');

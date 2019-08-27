@@ -1,6 +1,7 @@
 import { fetchRepositories } from './service/github';
 import { qs, qsa, $on, $delegate, filterObject, numberFormat, replaceImageToSvg } from './utils/helper';
-import { setStorage, getStorage } from './utils/storage';
+import { setStorage, getStorage, deleteStorage } from './utils/storage';
+import { initLocalization } from './utils/locale';
 import starIcon from './assets/icons/star.svg';
 import externalLinkIcon from './assets/icons/external-link.svg';
 import trashIcon from './assets/icons/trash.svg';
@@ -12,42 +13,11 @@ $on(window, 'load', function() {
     const currentRepositories = qs('.current-repositories');
     const btnSearch = qs('.search__btn button');
     const overlay = qs('.modal__overlay');
-    const defaultTheme = qs('.default__theme');
-    const patchTheme = qs('.patch-reporter__theme');
-
-    chrome.storage.sync.get('defaultnewtab', result => {
-        const { defaultnewtab } = result;
-        if (defaultnewtab) {
-            defaultTheme.checked = true;
-            patchTheme.checked = false;
-        } else {
-            defaultTheme.checked = false;
-            patchTheme.checked = true;
-        }
-    });
-
-    $on(
-        defaultTheme,
-        'click',
-        function() {
-            chrome.storage.sync.get(null, function(result) {
-                console.log(result);
-            });
-            chrome.storage.sync.set({ defaultnewtab: true });
-        },
-        false
-    );
-
-    $on(
-        patchTheme,
-        'click',
-        function() {
-            chrome.storage.sync.remove('defaultnewtab');
-        },
-        false
-    );
 
     getSubscribedLibraries();
+    setLanguageOptions();
+    setNewTabOptions();
+    initLocalization();
 
     $on(btnSearch, 'click', handleSearchClick, false);
     $on(overlay, 'click', closeModal, false);
@@ -55,6 +25,74 @@ $on(window, 'load', function() {
     $delegate(currentRepositories, '.btn__delete', 'click', removeSubscribedLibrary);
     $delegate(currentRepositories, '.btn__delete svg', 'click', removeSubscribedLibrary);
 });
+
+function setNewTabOptions() {
+    const defaultTab = qs('.default__tab');
+    const patchTab = qs('.patch-reporter__tab');
+    getStorage(null).then(result => {
+        const { defaultnewtab } = result;
+        if (defaultnewtab) {
+            defaultTab.checked = true;
+            patchTab.checked = false;
+        } else {
+            defaultTab.checked = false;
+            patchTab.checked = true;
+        }
+    });
+
+    $on(
+        defaultTab,
+        'click',
+        function() {
+            setStorage('defaultnewtab', true);
+        },
+        false
+    );
+
+    $on(
+        patchTab,
+        'click',
+        function() {
+            deleteStorage('defaultnewtab');
+        },
+        false
+    );
+}
+
+function setLanguageOptions() {
+    const langKo = qs('.lan-ko');
+    const langEn = qs('.lan-en');
+    getStorage(null).then(result => {
+        const { localeLanguage } = result;
+        if (localeLanguage === 'en') {
+            langKo.checked = false;
+            langEn.checked = true;
+        } else {
+            langKo.checked = true;
+            langEn.checked = false;
+        }
+    });
+
+    $on(
+        langKo,
+        'click',
+        function() {
+            setStorage('localeLanguage', 'ko');
+            initLocalization();
+        },
+        false
+    );
+
+    $on(
+        langEn,
+        'click',
+        function() {
+            setStorage('localeLanguage', 'en');
+            initLocalization();
+        },
+        false
+    );
+}
 
 function openModal() {
     const modal = qs('.modal');
@@ -168,7 +206,7 @@ function showResult(repositories) {
                 <div class="list__col">${repo.language}</div>
                 <div class="list__col">${repo.starCount}</div>
                 <div class="list__col">
-                    <button class="btn-subscribe"
+                    <button class="btn-subscribe add"
                         data-fullname="${repo.fullName}"
                         data-language="${repo.language}"
                         data-starcount="${numberFormat(repo.starCount)}"
@@ -182,7 +220,7 @@ function showResult(repositories) {
     searchResult.innerHTML = innerResult;
 
     const subscribeBtns = qsa('.btn-subscribe');
-
+    initLocalization();
     subscribeBtns.forEach(el => {
         $on(el, 'click', subscribeRepo, false);
     });

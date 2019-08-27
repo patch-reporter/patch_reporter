@@ -178,7 +178,6 @@ export function replaceImageToSvg() {
         const imgDataset = img.dataset;
         const imgURL = img.src;
 
-        console.log(imgDataset);
         fetch(imgURL)
             .then(response => {
                 return response.text();
