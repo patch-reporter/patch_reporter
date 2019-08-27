@@ -65,11 +65,11 @@ function closeModal() {
 }
 
 function getSubscribedLibraries() {
+	const currentRepositories = qs('.current-repositories');
+	currentRepositories.innerHTML = '';
+	const fragment = document.createDocumentFragment();
     getStorage('repositories').then(result => {
-        const repositories = result.repositories;
-        const currentRepositories = qs('.current-repositories');
-        currentRepositories.innerHTML = '';
-        const fragment = document.createDocumentFragment();
+		const repositories = result.repositories;
         for (const repoName in repositories) {
             const repository = repositories[repoName];
             const grid = document.createElement('li');
@@ -109,14 +109,17 @@ function getSubscribedLibraries() {
                 </div>
             `;
 
-            fragment.appendChild(grid);
-        }
-        const plusCard = document.createElement('li');
-        plusCard.className = 'grid-list';
-        plusCard.innerHTML = '<button class="btn__add">추가하기</button>';
-        currentRepositories.appendChild(fragment);
-        currentRepositories.appendChild(plusCard);
-    });
+			fragment.appendChild(grid)
+		}
+	})
+		.catch((e) => {console.log('error', e)})
+		.finally(() => {
+			const plusCard = document.createElement('li')
+			plusCard.className = 'grid-list'
+			plusCard.innerHTML = '<button class="btn__add">추가하기</button>'
+			currentRepositories.appendChild(fragment)
+			currentRepositories.appendChild(plusCard)
+		});
 }
 
 function removeSubscribedLibrary(e) {
