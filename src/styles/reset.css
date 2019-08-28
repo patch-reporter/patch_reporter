@@ -125,7 +125,6 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-    content: '';
     content: none;
 }
 table {
@@ -135,6 +134,7 @@ table {
 
 html,
 body {
+    font-family: 'Nanum Gothic', sans-serif;
     width: 100%;
     height: 100%;
 }

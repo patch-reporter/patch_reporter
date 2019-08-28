@@ -62,7 +62,7 @@ $on(window, 'load', function() {
 				continue;
 			}
 			inner += `
-				<div class="releases__item release-${release.id} ${repoName.replace('/', '__')}">
+				<div class="releases__item release-${release.id} ${repoName.replace(/[\/.]/gi, '__')}">
 					<div class="releases__item__date">
 						<div class="releases__item__date-inner">${getCurrentDate(release.created_at)}</div>
 					</div>
@@ -122,9 +122,10 @@ $on(window, 'load', function() {
 			() => {
 				let checkedRepos =
 					Array.prototype.slice.call(qsa('.sidebar__filter__input'))
-						.filter(el => el.checked).map(el => el.dataset.name.replace('/', '__'));
+						.filter(el => el.checked).map(el => el.dataset.name.replace(/[\/.]/gi, '__'));
+				console.log(checkedRepos);
 				if(!checkedRepos.length) {
-					checkedRepos = repos.map(repo => repo.fullName.replace('/', '__'));
+					checkedRepos = repos.map(repo => repo.fullName.replace(/[\/.]/gi, '__'));
 				}
 
 				qsa('.releases__item').forEach(el => el.style.display = 'none');
