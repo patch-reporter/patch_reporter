@@ -15,8 +15,20 @@ chrome.storage.sync.get('defaultnewtab', function(storage) {
         chrome.tabs.update({ url: 'chrome-search://local-ntp/local-ntp.html' });
     }
 });
-
 $on(window, 'load', function() {
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-86164198-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = 'https://ssl.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
     const settingBtnWrap = qs('.setting-btn-wrapper');
     const optionUrl = chrome.runtime.getURL('option.html');
     let repositories;

@@ -150,13 +150,13 @@ function getSubscribedLibraries() {
 								</span>
 							</li>
 							<li class="card__actions-btn github">
-								<span>
-									<img src="${externalLinkIcon}"/>
-								</span>
+								<a target="_blank" href="${repository.htmlUrl}">
+									<img src="${externalLinkIcon}" />
+								</a>
 							</li>
 							<li class="card__actions-btn delete">
 								<span class="btn__delete" data-fullname="${repository.fullName}">
-									<img class="svg" src="${trashIcon}" data-fullname="${repository.fullName}"/>
+									<img class="svg" src="${trashIcon}" data-fullname="${repository.fullName}" />
 								</span>
 							</li>
 						</ul>
@@ -244,6 +244,7 @@ function showResult(repositories) {
                         data-starcount="${numberFormat(repo.starCount)}"
                         data-description="${repo.description}"
                         data-thumbnail="${repo.thumbnail}"
+                        data-htmlurl="${repo.htmlUrl}"
                     >추가</button>
                 </div>
             </li>`;
@@ -259,7 +260,7 @@ function showResult(repositories) {
 }
 
 function subscribeRepo(e) {
-    const { fullname, language, starcount, description, thumbnail } = e.currentTarget.dataset;
+    const { fullname, language, starcount, description, thumbnail, htmlurl } = e.currentTarget.dataset;
     getStorage('repositories')
         .then(result => {
             const repositories = result.repositories;
@@ -274,6 +275,7 @@ function subscribeRepo(e) {
                 starCount: starcount,
                 description,
                 thumbnail,
+                htmlUrl: htmlurl,
             };
 
             const newRepositories = {
@@ -291,6 +293,7 @@ function subscribeRepo(e) {
                     starCount: starcount,
                     description,
                     thumbnail,
+                    htmlUrl: htmlurl,
                 },
             };
 
