@@ -11,12 +11,12 @@ const converter = new showdown.Converter();
 let history = [];
 
 $on(window, 'load', function() {
-	chrome.storage.sync.get('defaultnewtab', function(storage) {
+	/*chrome.storage.sync.get('defaultnewtab', function(storage) {
 		if (storage.defaultnewtab) {
 			// chrome.storage.sync.remove('defaultnewtab');
 			chrome.tabs.update({ url: 'chrome-search://local-ntp/local-ntp.html' });
 		}
-	});
+	});*/
 
     const settingBtnWrap = qs('.setting-btn-wrapper');
     const optionUrl = chrome.runtime.getURL('option.html');
@@ -31,6 +31,10 @@ $on(window, 'load', function() {
     getStorage('repositories')
 		.then(result => {
 			repositories = result.repositories;
+
+			if(Object.keys(repositories).length === 0) {
+				throw new Error('no storage');
+			}
 		})
 		.then(() => {
 			Promise.all(
@@ -48,6 +52,14 @@ $on(window, 'load', function() {
 				renderReleaseList(history, repositories);
 				renderRepoFilter();
 			});
+		})
+		.catch(e => {
+			console.error(e);
+			if(e.message.includes('no storage')) {
+				showNoData();
+			} else {
+				alert('Something is wrong!');
+			}
 		});
 
 
@@ -148,4 +160,10 @@ function toggleBody(e) {
 		$item.classList.add('opened');
 		$itemBody.style.maxHeight = $itemBody.scrollHeight + 'px';
 	}
+}
+
+function showNoData() {
+	const NO_DATA = `<h2 style="text-align:center;">No Data</h2>`
+	qs('.releases').innerHTML = NO_DATA;
+	qs('.sidebar__filters').innerHTML = NO_DATA;
 }
