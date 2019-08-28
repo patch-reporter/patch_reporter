@@ -28,16 +28,23 @@ $on(window, 'load', function() {
 function setNewTabOptions() {
     const defaultTab = qs('.default__tab');
     const patchTab = qs('.patch-reporter__tab');
-    getStorage(null).then(result => {
-        const { defaultnewtab } = result;
-        if (defaultnewtab) {
-            defaultTab.checked = true;
-            patchTab.checked = false;
-        } else {
-            defaultTab.checked = false;
-            patchTab.checked = true;
-        }
-    });
+    getStorage(null)
+        .then(result => {
+            const { defaultnewtab } = result;
+            if (defaultnewtab) {
+                defaultTab.checked = true;
+                patchTab.checked = false;
+            } else {
+                defaultTab.checked = false;
+                patchTab.checked = true;
+            }
+        })
+        .catch(err => {
+            if (err) {
+                defaultTab.checked = false;
+                patchTab.checked = true;
+            }
+        });
 
     $on(
         defaultTab,
@@ -61,16 +68,23 @@ function setNewTabOptions() {
 function setLanguageOptions() {
     const langKo = qs('.lan-ko');
     const langEn = qs('.lan-en');
-    getStorage(null).then(result => {
-        const { localeLanguage } = result;
-        if (localeLanguage === 'en') {
-            langKo.checked = false;
-            langEn.checked = true;
-        } else {
-            langKo.checked = true;
-            langEn.checked = false;
-        }
-    });
+    getStorage(null)
+        .then(result => {
+            const { localeLanguage } = result;
+            if (localeLanguage === 'en') {
+                langKo.checked = false;
+                langEn.checked = true;
+            } else {
+                langKo.checked = true;
+                langEn.checked = false;
+            }
+        })
+        .catch(err => {
+            if (err) {
+                langKo.checked = true;
+                langEn.checked = false;
+            }
+        });
 
     $on(
         langKo,
@@ -104,17 +118,17 @@ function closeModal() {
 }
 
 function getSubscribedLibraries() {
-	const currentRepositories = qs('.current-repositories');
-	currentRepositories.innerHTML = '';
-	const fragment = document.createDocumentFragment();
+    const currentRepositories = qs('.current-repositories');
+    currentRepositories.innerHTML = '';
+    const fragment = document.createDocumentFragment();
     getStorage('repositories')
-		.then(result => {
-			const repositories = result.repositories;
-			for(const repoName in repositories) {
-				const repository = repositories[repoName];
-				const grid = document.createElement('li');
-				grid.className = 'grid-list';
-				grid.innerHTML = `
+        .then(result => {
+            const repositories = result.repositories;
+            for (const repoName in repositories) {
+                const repository = repositories[repoName];
+                const grid = document.createElement('li');
+                grid.className = 'grid-list';
+                grid.innerHTML = `
 					<div class="card">
 						<div class="card__head">
 							<div class="card__head--thumb">
@@ -148,18 +162,20 @@ function getSubscribedLibraries() {
 						</ul>
 					</div>
 				`;
-				fragment.appendChild(grid);
-			}
-		})
-		.catch((e) => {console.log('error', e)})
-		.finally(() => {
-			const plusCard = document.createElement('li');
-			plusCard.className = 'grid-list';
-			plusCard.innerHTML = '<button class="btn__add">+</button>';
-			currentRepositories.appendChild(fragment);
-			currentRepositories.appendChild(plusCard);
-			replaceImageToSvg();
-		});
+                fragment.appendChild(grid);
+            }
+        })
+        .catch(e => {
+            console.log('error', e);
+        })
+        .finally(() => {
+            const plusCard = document.createElement('li');
+            plusCard.className = 'grid-list';
+            plusCard.innerHTML = '<button class="btn__add">+</button>';
+            currentRepositories.appendChild(fragment);
+            currentRepositories.appendChild(plusCard);
+            replaceImageToSvg();
+        });
 }
 /*
 
