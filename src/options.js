@@ -6,7 +6,6 @@ import starIcon from './assets/icons/star.svg';
 import externalLinkIcon from './assets/icons/external-link.svg';
 import trashIcon from './assets/icons/trash.svg';
 import './styles/reset.css';
-import './styles/index.css';
 import './styles/option.css';
 
 $on(window, 'load', function() {

@@ -1,3 +1,11 @@
+.container {
+    padding: 80px 80px 64px;
+    margin: 0 auto;
+    max-width: 1180px;
+    box-sizing: border-box;
+    background-color: #fbfbfb;
+}
+
 .box {
     padding-top: 20px;
     padding-bottom: 60px;
@@ -25,9 +33,11 @@
     margin-right: 8px;
     box-sizing: border-box;
     position: relative;
-    border-radius: 2px;
+    border-radius: 5px;
     flex-direction: column;
     border: 1px solid #e8e8e8;
+    box-shadow: 0 2px 5px -2px rgba(63,63,63,.39);
+    background-color: #fff;
 }
 
 .card__head {
@@ -124,16 +134,17 @@
     margin-right: 8px;
     box-sizing: border-box;
     position: relative;
-    border-radius: 2px;
+    border-radius: 5px;
     flex-direction: column;
     border: 1px dashed #e8e8e8;
     font-size: 70px;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: box-shadow 0.3s ease;
 }
 .btn__add:hover {
-    background-color: #ddd;
+    box-shadow: 0 2px 5px -2px rgba(63,63,63,.39);
 }
 .btn__add:focus {
     outline: 0;
